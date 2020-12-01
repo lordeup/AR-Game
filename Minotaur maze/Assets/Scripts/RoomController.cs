@@ -21,7 +21,7 @@ public class RoomController : MonoBehaviourPunCallbacks
     {
         // _sceneController.LoadScene("MainMenu");
         SceneManager.LoadScene("MainMenu");
-    }i
+    }
 
     public void LeaveRoom()
     {
