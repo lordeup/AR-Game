@@ -5,28 +5,25 @@ using Photon.Pun;
 [RequireComponent(typeof(InputField))]
 public class PlayerNameInputField : MonoBehaviour
 {
-    // Store the PlayerPref Key to avoid typos
-    private const string playerNamePrefKey = "PlayerName";
+    private const string PlayerNamePrefKey = "PlayerName";
     public InputField inputField;
 
-    /// <summary>
-    /// MonoBehaviour method called on GameObject by Unity during initialization phase.
-    /// </summary>
-    private void Start () {
-        string defaultName = string.Empty;
+    private void Start()
+    {
+        var defaultName = string.Empty;
 
         if (inputField != null)
         {
-            if (PlayerPrefs.HasKey(playerNamePrefKey))
+            if (PlayerPrefs.HasKey(PlayerNamePrefKey))
             {
-                defaultName = PlayerPrefs.GetString(playerNamePrefKey);
+                defaultName = PlayerPrefs.GetString(PlayerNamePrefKey);
                 inputField.text = defaultName;
             }
         }
-        
+
         PhotonNetwork.NickName = defaultName;
     }
-    
+
     public void SetPlayerName(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -34,9 +31,9 @@ public class PlayerNameInputField : MonoBehaviour
             Debug.LogError("Player Name is null or empty");
             return;
         }
-        
+
         PhotonNetwork.NickName = value;
-        
-        PlayerPrefs.SetString(playerNamePrefKey,value);
+
+        PlayerPrefs.SetString(PlayerNamePrefKey, value);
     }
 }
