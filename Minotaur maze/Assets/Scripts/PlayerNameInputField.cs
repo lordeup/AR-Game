@@ -6,11 +6,11 @@ using Photon.Pun;
 public class PlayerNameInputField : MonoBehaviour
 {
     private const string PlayerNamePrefKey = "PlayerName";
-    public InputField inputField;
 
     private void Start()
     {
         var defaultName = string.Empty;
+        var inputField = GetComponent<InputField>();
 
         if (inputField != null)
         {

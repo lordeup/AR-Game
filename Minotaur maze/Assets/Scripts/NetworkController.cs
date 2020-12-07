@@ -20,8 +20,4 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         Debug.Log("We are conntecting " + PhotonNetwork.CloudRegion);
     }
-
-    private void Update()
-    {
-    }
 }

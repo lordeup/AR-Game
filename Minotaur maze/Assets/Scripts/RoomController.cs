@@ -7,13 +7,14 @@ using UnityEngine.SceneManagement;
 public class RoomController : MonoBehaviourPunCallbacks
 {
     private SceneController _sceneController;
-    public TextMeshProUGUI playersInformation;
-    public GameObject playerPrefab;
+    [SerializeField] private TextMeshProUGUI playersInformation;
+    [SerializeField] private GameObject playerPrefab;
 
     private void Start()
     {
         _sceneController = gameObject.AddComponent<SceneController>();
-        var pos = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+        // var pos = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f));
+        var pos = new Vector3(0, 0, 0);
         PhotonNetwork.Instantiate(playerPrefab.name, pos, Quaternion.identity);
     }
 
