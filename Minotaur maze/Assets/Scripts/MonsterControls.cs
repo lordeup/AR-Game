@@ -1,0 +1,30 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class MonsterControls : MonoBehaviour
+{
+    private Animator _animator;
+
+    private void Start()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
+    private IEnumerator DestroyMonsterAfterDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Destroy();
+    }
+
+    private void Destroy()
+    {
+        Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.gameObject.CompareTag("Player")) return;
+        _animator.Play("Die");
+        StartCoroutine(DestroyMonsterAfterDelay());
+    }
+}

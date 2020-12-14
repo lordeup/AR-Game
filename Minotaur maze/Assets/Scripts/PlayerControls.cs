@@ -7,22 +7,27 @@ public class PlayerControls : MonoBehaviour
     private Camera _mainCamera;
     private NavMeshAgent _agent;
     private PhotonView _photonView;
+    private Animator _animator;
 
     private void Start()
     {
         _mainCamera = Camera.main;
         _agent = GetComponent<NavMeshAgent>();
         _photonView = GetComponent<PhotonView>();
+        _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         UpdateMainCamera();
         if (!_photonView.IsMine) return;
-        if (!Input.GetMouseButtonDown(0)) return;
-        if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out var raycastHit))
+        if (Input.GetMouseButtonDown(0))
         {
-            _agent.SetDestination(raycastHit.point);
+            if (Physics.Raycast(_mainCamera.ScreenPointToRay(Input.mousePosition), out var raycastHit))
+            {
+                _animator.Play("walk");
+                _agent.SetDestination(raycastHit.point);
+            }
         }
     }
 
@@ -39,5 +44,10 @@ public class PlayerControls : MonoBehaviour
         }
 
         _mainCamera.transform.LookAt(transform.position);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _animator.Play("attack01");
     }
 }
