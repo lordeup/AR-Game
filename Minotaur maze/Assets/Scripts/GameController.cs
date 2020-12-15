@@ -1,5 +1,4 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -10,6 +9,7 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private Transform prefabPlayerWithWeapon;
     [SerializeField] private Transform prefabPlayerWithThread;
     [SerializeField] private Transform prefabMonster;
+    [SerializeField] private FixedJoystick joystick;
 
     private MazeSpawner _mazeSpawner;
     private NavMeshSurface _navMeshSurface;
@@ -46,7 +46,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         if (playerCount == MaxNumberPlayers) return;
-        var player = prefabPlayerWithWeapon;
+        var player = prefabPlayerWithThread;
         if (playerCount > 1)
         {
             player = prefabPlayerWithThread;
@@ -54,14 +54,16 @@ public class GameController : MonoBehaviourPunCallbacks
 
         var pos = new Vector3(0, 0, 0);
         PhotonNetwork.Instantiate(player.name, pos, Quaternion.identity);
+        PlayerControls.Joystick = joystick;
     }
 
     private void InitializationMonsters()
     {
         for (var i = 0; i < 5; ++i)
         {
-            var pos = new Vector3(Random.Range(5f, 40f), 0);
-            PhotonNetwork.Instantiate(prefabMonster.name, pos, Quaternion.identity);
+            // var pos = new Vector3(Random.Range(5f, 40f), 0);
+            var pos = new Vector3(5, 0);
+            Instantiate(prefabMonster, pos, Quaternion.identity);
         }
     }
 

@@ -1357,7 +1357,7 @@ GameObject:
   - component: {fileID: 1564387121696837593}
   m_Layer: 8
   m_Name: Meshtint Barbarian Gold
-  m_TagString: Player
+  m_TagString: PlayerWithWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1500,7 +1500,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!1 &1819908636591978
 GameObject:

@@ -23,8 +23,14 @@ public class MonsterControls : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("Player")) return;
-        _animator.Play("Die");
-        StartCoroutine(DestroyMonsterAfterDelay());
+        if (other.gameObject.CompareTag("PlayerWithWeapon"))
+        {
+            _animator.Play("Die");
+            StartCoroutine(DestroyMonsterAfterDelay());
+        }
+        else if (other.gameObject.CompareTag("PlayerWithThread"))
+        {
+            _animator.Play("Attack 01");
+        }
     }
 }

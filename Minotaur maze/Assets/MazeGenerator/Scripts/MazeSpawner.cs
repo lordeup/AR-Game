@@ -49,6 +49,7 @@ public class MazeSpawner : MonoBehaviour {
 			mMazeGenerator = new DivisionMazeGenerator (Rows, Columns);
 			break;
 		}
+		var scale = new Vector3(1f, 1f, 1f);
 		mMazeGenerator.GenerateMaze ();
 		for (int row = 0; row < Rows; row++) {
 			for(int column = 0; column < Columns; column++){
@@ -79,6 +80,7 @@ public class MazeSpawner : MonoBehaviour {
 					tmp = Instantiate(GoalPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
 					tmp.transform.parent = transform;
 				}
+				tmp.transform.localScale = scale;
 			}
 		}
 		if(Pillar != null){
@@ -88,6 +90,7 @@ public class MazeSpawner : MonoBehaviour {
 					float z = row*(CellHeight+(AddGaps?.2f:0));
 					GameObject tmp = Instantiate(Pillar,new Vector3(x-CellWidth/2,0,z-CellHeight/2),Quaternion.identity) as GameObject;
 					tmp.transform.parent = transform;
+					tmp.transform.localScale = scale;
 				}
 			}
 		}
