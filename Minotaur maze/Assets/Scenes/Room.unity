@@ -1348,8 +1348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4d20e3cac7addd409c43b788c262325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabPlayerWithWeapon: {fileID: 4749245984341470, guid: 0814c74d24bfa5242a2e6da6dd2595b2, type: 3}
-  prefabPlayerWithThread: {fileID: 4238784062483541894, guid: cea8a3ca23fa8b047a91c9c5dd003ee4, type: 3}
+  prefabWarriorPlayer: {fileID: 4749245984341470, guid: 0814c74d24bfa5242a2e6da6dd2595b2, type: 3}
+  prefabMagePlayer: {fileID: 4238784062483541894, guid: cea8a3ca23fa8b047a91c9c5dd003ee4, type: 3}
   prefabMonster: {fileID: 4744222756475520, guid: 5a173de1ecfd21c41866e4a0ff0ed355, type: 3}
   joystick: {fileID: 826930252}
 --- !u!4 &2044231490

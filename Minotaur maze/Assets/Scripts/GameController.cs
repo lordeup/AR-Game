@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Transform prefabPlayerWithWeapon;
-    [SerializeField] private Transform prefabPlayerWithThread;
+    [SerializeField] private Transform prefabWarriorPlayer;
+    [SerializeField] private Transform prefabMagePlayer;
     [SerializeField] private Transform prefabMonster;
     [SerializeField] private FixedJoystick joystick;
 
@@ -46,10 +46,10 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         if (playerCount == MaxNumberPlayers) return;
-        var player = prefabPlayerWithThread;
+        var player = prefabWarriorPlayer;
         if (playerCount > 1)
         {
-            player = prefabPlayerWithThread;
+            player = prefabMagePlayer;
         }
 
         var pos = new Vector3(0, 0, 0);

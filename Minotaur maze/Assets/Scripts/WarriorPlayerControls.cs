@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections;
-using Photon.Pun;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
 public class WarriorPlayerControls : BasicPlayerControls
 {
-
-    public override void OnTriggerEnter(Collider other)
+    public WarriorPlayerControls() : base(GameObjectTag.Warrior)
     {
-        if (other.gameObject.CompareTag("Monster"))
+        
+    }
+    
+    protected override void OnTriggerEnter(Collider other)
+    {
+        if (gameObject.CompareTag(_gameObjectTag.ToString()) && other.gameObject.CompareTag(GameObjectTag.Monster.ToString()))
         {
-            if (gameObject.CompareTag("PlayerWithWeapon"))
-            {
-                _animator.Play("attack01");
-            }
+            _animator.Play("attack01");
         }
     }
 }

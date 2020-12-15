@@ -15,6 +15,13 @@ public abstract class BasicPlayerControls : MonoBehaviour
     protected const float speed = 10f;
     protected Vector3 _initPosition;
 
+    protected readonly GameObjectTag _gameObjectTag;
+
+    protected BasicPlayerControls(GameObjectTag gameObjectTag)
+    {
+        _gameObjectTag = gameObjectTag;
+    }
+
     private void Start()
     {
         _mainCamera = Camera.main;
@@ -67,35 +74,5 @@ public abstract class BasicPlayerControls : MonoBehaviour
         _mainCamera.transform.LookAt(transform.position);
     }
 
-    private IEnumerator RespawnPlayerAfterDelay()
-    {
-        yield return new WaitForSeconds(1.0f);
-        RespawnPlayer();
-    }
-
-    private void RespawnPlayer()
-    {
-        var pos = new Vector3(0, 0, 0);
-        var transform1 = _agent.transform;
-        _agent.destination = pos;
-        transform1.localPosition = _initPosition;
-        transform1.rotation = Quaternion.identity;
-    }
-
-    public abstract void OnTriggerEnter(Collider other);
-
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.gameObject.CompareTag("Monster"))
-    //     {
-    //         if (gameObject.CompareTag("PlayerWithWeapon"))
-    //         {
-    //             _animator.Play("attack01");
-    //         }
-    //         else if (gameObject.CompareTag("PlayerWithThread"))
-    //         {
-    //             StartCoroutine(RespawnPlayerAfterDelay());
-    //         }
-    //     }
-    // }
+    protected abstract void OnTriggerEnter(Collider other);
 }

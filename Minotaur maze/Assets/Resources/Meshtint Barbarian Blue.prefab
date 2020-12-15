@@ -603,12 +603,12 @@ GameObject:
   - component: {fileID: 1199545013138283905}
   - component: {fileID: 4420685007836717820}
   - component: {fileID: -2244338669440814890}
-  - component: {fileID: -3211220311955110421}
   - component: {fileID: 3510113576374990929}
   - component: {fileID: 2348616424298712207}
+  - component: {fileID: 3329448724454659649}
   m_Layer: 8
   m_Name: Meshtint Barbarian Blue
-  m_TagString: PlayerWithThread
+  m_TagString: Mage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -712,18 +712,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &-3211220311955110421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4235121538197199524}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b840b7b216092b44b61f62507de79ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &3510113576374990929
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -753,6 +741,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3329448724454659649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4235121538197199524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb1e0c78fd1e4b7c89f61afaa2f78591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4235165822054691086
 GameObject:
   m_ObjectHideFlags: 0

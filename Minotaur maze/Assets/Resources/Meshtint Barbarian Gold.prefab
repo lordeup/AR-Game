@@ -1351,13 +1351,13 @@ GameObject:
   - component: {fileID: 95785311282749608}
   - component: {fileID: 4345319340016424272}
   - component: {fileID: 6728999453300079979}
-  - component: {fileID: 4245945882072144946}
   - component: {fileID: 5554935869450068990}
   - component: {fileID: 427397977083287959}
   - component: {fileID: 1564387121696837593}
+  - component: {fileID: -1917234786358531305}
   m_Layer: 8
   m_Name: Meshtint Barbarian Gold
-  m_TagString: PlayerWithWeapon
+  m_TagString: Warrior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1439,18 +1439,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &4245945882072144946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1757056487138150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b840b7b216092b44b61f62507de79ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!195 &5554935869450068990
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1502,6 +1490,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &-1917234786358531305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757056487138150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64bfe8dc96e14dfcbb65cf8db9dc88b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1819908636591978
 GameObject:
   m_ObjectHideFlags: 0
