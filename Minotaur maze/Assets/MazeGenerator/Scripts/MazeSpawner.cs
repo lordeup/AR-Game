@@ -28,6 +28,7 @@ public class MazeSpawner : MonoBehaviour {
 	public GameObject GoalPrefab = null;
 
 	private BasicMazeGenerator mMazeGenerator = null;
+	public bool isGenerate = false;
 	private int _num = 1;
 
 	void Start () {
@@ -99,5 +100,6 @@ public class MazeSpawner : MonoBehaviour {
 				}
 			}
 		}
+		isGenerate = true;
 	}
 }

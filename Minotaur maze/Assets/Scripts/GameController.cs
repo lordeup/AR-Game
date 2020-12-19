@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -32,6 +33,15 @@ public class GameController : MonoBehaviourPunCallbacks
         InitializationMonsters();
 
         gameObject.AddComponent<NavMeshRebaker>();
+    }
+
+    private void Update()
+    {
+        if (_mazeSpawner.isGenerate)
+        {
+            var walls = GameObject.FindGameObjectsWithTag("Wall");
+            _mazeSpawner.isGenerate = false;
+        }
     }
 
     private void SetActive()

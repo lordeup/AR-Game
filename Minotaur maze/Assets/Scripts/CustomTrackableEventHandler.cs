@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Vuforia;
 
 public class CustomTrackableEventHandler : DefaultTrackableEventHandler
@@ -17,12 +15,23 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
     {
         gameIsStarted = false;
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
-        // RegisterTrackableEventHandler
         if (mTrackableBehaviour)
         {
-            // mTrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStatusChanged);
-            // mTrackableBehaviour.RegisterTrackableEventHandler(this);
+            mTrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStatusChanged);
         }
+    }
+
+    private void OnTrackableStatusChanged(TrackableBehaviour.StatusChangeResult statusChangeResult)
+    {
+        m_PreviousStatus = statusChangeResult.PreviousStatus;
+        m_NewStatus = statusChangeResult.NewStatus;
+
+        Debug.LogFormat("Trackable {0} {1} -- {2}",
+            mTrackableBehaviour.TrackableName,
+            mTrackableBehaviour.CurrentStatus,
+            mTrackableBehaviour.CurrentStatusInfo);
+
+        HandleTrackableStatusChanged();
     }
 
     protected override void OnTrackingFound()
