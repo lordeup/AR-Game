@@ -23,10 +23,12 @@ public class MazeSpawner : MonoBehaviour {
 	public int Columns = 5;
 	public float CellWidth = 5;
 	public float CellHeight = 5;
+	public Vector3 scale = Vector3.one;
 	public bool AddGaps = true;
 	public GameObject GoalPrefab = null;
 
 	private BasicMazeGenerator mMazeGenerator = null;
+	private int _num = 1;
 
 	void Start () {
 		if (!FullRandom) {
@@ -49,12 +51,11 @@ public class MazeSpawner : MonoBehaviour {
 			mMazeGenerator = new DivisionMazeGenerator (Rows, Columns);
 			break;
 		}
-		var scale = new Vector3(1f, 1f, 1f);
 		mMazeGenerator.GenerateMaze ();
 		for (int row = 0; row < Rows; row++) {
 			for(int column = 0; column < Columns; column++){
-				float x = column*(CellWidth+(AddGaps?.2f:0));
-				float z = row*(CellHeight+(AddGaps?.2f:0));
+				float x = column*(CellWidth+(AddGaps?.2f:0)) / _num;
+				float z = row*(CellHeight+(AddGaps?.2f:0)) / _num;
 				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
@@ -62,32 +63,36 @@ public class MazeSpawner : MonoBehaviour {
 				if(cell.WallRight){
 					tmp = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
 					tmp.transform.parent = transform;
+					tmp.transform.localScale = scale;
 				}
 				if(cell.WallFront){
 					tmp = Instantiate(Wall,new Vector3(x,0,z+CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,0,0)) as GameObject;// front
 					tmp.transform.parent = transform;
+					tmp.transform.localScale = scale;
 				}
 				if(cell.WallLeft){
 					tmp = Instantiate(Wall,new Vector3(x-CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,270,0)) as GameObject;// left
 					tmp.transform.parent = transform;
+					tmp.transform.localScale = scale;
 				}
 				if(cell.WallBack){
 					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
+					tmp.transform.localScale = scale;
 				}
 				if(cell.IsGoal && GoalPrefab != null)
 				{
 					tmp = Instantiate(GoalPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
 					tmp.transform.parent = transform;
+					tmp.transform.localRotation = GoalPrefab.transform.localRotation;
 				}
-				tmp.transform.localScale = scale;
 			}
 		}
 		if(Pillar != null){
 			for (int row = 0; row < Rows+1; row++) {
 				for (int column = 0; column < Columns+1; column++) {
-					float x = column*(CellWidth+(AddGaps?.2f:0));
-					float z = row*(CellHeight+(AddGaps?.2f:0));
+					float x = column*(CellWidth+(AddGaps?.2f:0)) / _num;
+					float z = row*(CellHeight+(AddGaps?.2f:0)) / _num;
 					GameObject tmp = Instantiate(Pillar,new Vector3(x-CellWidth/2,0,z-CellHeight/2),Quaternion.identity) as GameObject;
 					tmp.transform.parent = transform;
 					tmp.transform.localScale = scale;

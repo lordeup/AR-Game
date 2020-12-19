@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
@@ -13,27 +12,26 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private MazeSpawner _mazeSpawner;
     private NavMeshSurface _navMeshSurface;
+    private ThreadCountControl _threadCountControl;
 
     private const int MaxNumberPlayers = 3;
 
-    private const int _randomSeed = 10;
-    // _randomSeed = Random.Range(1, 100);
+    // public void StartGame()
+    // {
+    //
+    // }
 
     private void Start()
     {
         _mazeSpawner = GetComponent<MazeSpawner>();
         _navMeshSurface = GetComponent<NavMeshSurface>();
 
-        _mazeSpawner.RandomSeed = _randomSeed;
+        _mazeSpawner.RandomSeed = Helper.RandomSeed;
         SetActive();
         InitializationPlayers();
         InitializationMonsters();
 
         gameObject.AddComponent<NavMeshRebaker>();
-    }
-
-    private void Update()
-    {
     }
 
     private void SetActive()
@@ -52,19 +50,27 @@ public class GameController : MonoBehaviourPunCallbacks
             player = prefabMagePlayer;
         }
 
-        var pos = new Vector3(0, 0, 0);
-        PhotonNetwork.Instantiate(player.name, pos, Quaternion.identity);
-        PlayerControls.Joystick = joystick;
+        PhotonNetwork.Instantiate(player.name, Helper.GetRandomPlayerPosition(), Quaternion.identity);
+        Debug.Log("_playersPosition.Count " + Helper._playersPosition.Count);
+
+        BasicPlayerControl.Joystick = joystick;
+
+        if (player.CompareTag(GameObjectTag.Mage.ToString()))
+        {
+            _threadCountControl = GetComponent<ThreadCountControl>();
+            _threadCountControl.enabled = true;
+            BasicPlayerControl.ThreadCountControl = _threadCountControl;
+        }
     }
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i < 5; ++i)
+        for (var i = 0; i <= 10; ++i)
         {
-            // var pos = new Vector3(Random.Range(5f, 40f), 0);
-            var pos = new Vector3(5, 0);
-            Instantiate(prefabMonster, pos, Quaternion.identity);
+            Instantiate(prefabMonster, Helper.GetRandomMonsterPosition(), Quaternion.identity);
         }
+
+        Debug.Log("_monstersPosition.Count " + Helper._monstersPosition.Count);
     }
 
     public override void OnLeftRoom()

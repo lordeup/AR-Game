@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MonsterControls : MonoBehaviour
+public class MonsterControl : MonoBehaviour
 {
     private Animator _animator;
+    private static readonly int Die = Animator.StringToHash("Die");
+    private static readonly int Property = Animator.StringToHash("Attack 01");
 
     private void Start()
     {
@@ -12,12 +14,7 @@ public class MonsterControls : MonoBehaviour
 
     private IEnumerator DestroyMonsterAfterDelay()
     {
-        yield return new WaitForSeconds(1.0f);
-        Destroy();
-    }
-
-    private void Destroy()
-    {
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 
@@ -25,12 +22,12 @@ public class MonsterControls : MonoBehaviour
     {
         if (other.gameObject.CompareTag(GameObjectTag.Warrior.ToString()))
         {
-            _animator.Play("Die");
+            _animator.SetTrigger(Die);
             StartCoroutine(DestroyMonsterAfterDelay());
         }
         else if (other.gameObject.CompareTag(GameObjectTag.Mage.ToString()))
         {
-            _animator.Play("Attack 01");
+            _animator.SetTrigger(Property);
         }
     }
 }

@@ -7,12 +7,11 @@ TagManager:
   - Floor
   - Coin
   - Monster
-  - Joystick
   - Warrior
   - Mage
   - Spectator
-  - PlayerWithThread
-  - PlayerWithWeapon
+  - Thread
+  - Joystick
   layers:
   - Default
   - TransparentFX
@@ -24,7 +23,7 @@ TagManager:
   - 
   - Player
   - Monster
-  - 
+  - Thread
   - 
   - 
   - 

@@ -14,6 +14,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions {MaxPlayers = 3});
         Debug.Log("Room created");
+        Helper.Initialize();
     }
 
     public void JoinRoom()
