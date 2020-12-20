@@ -23,7 +23,6 @@ public class MazeSpawner : MonoBehaviour {
 	public int Columns = 5;
 	public float CellWidth = 5;
 	public float CellHeight = 5;
-	public Vector3 scale = Vector3.one;
 	public bool AddGaps = true;
 	public GameObject GoalPrefab = null;
 
@@ -64,22 +63,18 @@ public class MazeSpawner : MonoBehaviour {
 				if(cell.WallRight){
 					tmp = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
 					tmp.transform.parent = transform;
-					tmp.transform.localScale = scale;
 				}
 				if(cell.WallFront){
 					tmp = Instantiate(Wall,new Vector3(x,0,z+CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,0,0)) as GameObject;// front
 					tmp.transform.parent = transform;
-					tmp.transform.localScale = scale;
 				}
 				if(cell.WallLeft){
 					tmp = Instantiate(Wall,new Vector3(x-CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,270,0)) as GameObject;// left
 					tmp.transform.parent = transform;
-					tmp.transform.localScale = scale;
 				}
 				if(cell.WallBack){
 					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
-					tmp.transform.localScale = scale;
 				}
 				if(cell.IsGoal && GoalPrefab != null)
 				{
@@ -96,7 +91,6 @@ public class MazeSpawner : MonoBehaviour {
 					float z = row*(CellHeight+(AddGaps?.2f:0)) / _num;
 					GameObject tmp = Instantiate(Pillar,new Vector3(x-CellWidth/2,0,z-CellHeight/2),Quaternion.identity) as GameObject;
 					tmp.transform.parent = transform;
-					tmp.transform.localScale = scale;
 				}
 			}
 		}

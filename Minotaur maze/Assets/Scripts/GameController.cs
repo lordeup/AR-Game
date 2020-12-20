@@ -17,11 +17,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private const int MaxNumberPlayers = 3;
 
-    // public void StartGame()
-    // {
-    //
-    // }
-
     private void Start()
     {
         _mazeSpawner = GetComponent<MazeSpawner>();
