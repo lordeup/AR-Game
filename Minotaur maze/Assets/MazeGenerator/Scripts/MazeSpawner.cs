@@ -60,6 +60,14 @@ public class MazeSpawner : MonoBehaviour {
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
 				tmp.transform.parent = transform;
+
+				if (cell.IsGoal && GoalPrefab != null)
+				{
+					tmp = Instantiate(GoalPrefab, new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
+					tmp.transform.parent = transform;
+					tmp.transform.localRotation = GoalPrefab.transform.localRotation;
+				}				
+
 				if(cell.WallRight){
 					tmp = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
 					tmp.transform.parent = transform;
@@ -73,15 +81,14 @@ public class MazeSpawner : MonoBehaviour {
 					tmp.transform.parent = transform;
 				}
 				if(cell.WallBack){
-					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
+                    if (column == Columns - 1)
+                    {
+                        continue;
+                    }
+                    tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
 				}
-				if(cell.IsGoal && GoalPrefab != null)
-				{
-					tmp = Instantiate(GoalPrefab,new Vector3(x,1,z), Quaternion.Euler(0,0,0)) as GameObject;
-					tmp.transform.parent = transform;
-					tmp.transform.localRotation = GoalPrefab.transform.localRotation;
-				}
+				
 			}
 		}
 		if(Pillar != null){
