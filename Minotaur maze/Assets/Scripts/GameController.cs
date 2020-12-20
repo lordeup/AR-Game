@@ -9,6 +9,7 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private Transform prefabWarriorPlayer;
     [SerializeField] private Transform prefabMagePlayer;
     [SerializeField] private Transform prefabMonster;
+    [SerializeField] private RectTransform winningPanel;
     [SerializeField] private FixedJoystick joystick;
 
     private MazeSpawner _mazeSpawner;
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviourPunCallbacks
         InitializationMonsters();
 
         gameObject.AddComponent<NavMeshRebaker>();
+        BasicPlayerControl.WinningPanel = winningPanel;
     }
 
     private void Update()

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MonsterControl : MonoBehaviour
 {
@@ -12,9 +11,8 @@ public class MonsterControl : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private IEnumerator DestroyMonsterAfterDelay()
+    private void Destroy()
     {
-        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 
@@ -23,7 +21,7 @@ public class MonsterControl : MonoBehaviour
         if (other.gameObject.CompareTag(GameObjectTag.Warrior.ToString()))
         {
             _animator.SetTrigger(Die);
-            StartCoroutine(DestroyMonsterAfterDelay());
+            StartCoroutine(SceneController.WaitMethod(Destroy, 0.5f));
         }
         else if (other.gameObject.CompareTag(GameObjectTag.Mage.ToString()))
         {
