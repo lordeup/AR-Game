@@ -25,10 +25,9 @@ public class MazeSpawner : MonoBehaviour {
 	public float CellHeight = 5;
 	public bool AddGaps = true;
 	public GameObject GoalPrefab = null;
+	private bool _isExit;
 
 	private BasicMazeGenerator mMazeGenerator = null;
-	public bool isGenerate = false;
-	private int _num = 1;
 
 	void Start () {
 		if (!FullRandom) {
@@ -54,8 +53,8 @@ public class MazeSpawner : MonoBehaviour {
 		mMazeGenerator.GenerateMaze ();
 		for (int row = 0; row < Rows; row++) {
 			for(int column = 0; column < Columns; column++){
-				float x = column*(CellWidth+(AddGaps?.2f:0)) / _num;
-				float z = row*(CellHeight+(AddGaps?.2f:0)) / _num;
+				float x = column*(CellWidth+(AddGaps?.2f:0));
+				float z = row*(CellHeight+(AddGaps?.2f:0));
 				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
@@ -66,7 +65,7 @@ public class MazeSpawner : MonoBehaviour {
 					tmp = Instantiate(GoalPrefab, new Vector3(x, 1, z), Quaternion.Euler(0, 0, 0)) as GameObject;
 					tmp.transform.parent = transform;
 					tmp.transform.localRotation = GoalPrefab.transform.localRotation;
-				}				
+				}
 
 				if(cell.WallRight){
 					tmp = Instantiate(Wall,new Vector3(x+CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,90,0)) as GameObject;// right
@@ -80,27 +79,28 @@ public class MazeSpawner : MonoBehaviour {
 					tmp = Instantiate(Wall,new Vector3(x-CellWidth/2,0,z)+Wall.transform.position,Quaternion.Euler(0,270,0)) as GameObject;// left
 					tmp.transform.parent = transform;
 				}
-				if(cell.WallBack){
-                    if (column == Columns - 1)
-                    {
-                        continue;
-                    }
-                    tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
+				if(cell.WallBack)
+				{
+					tmp = Instantiate(Wall,new Vector3(x,0,z-CellHeight/2)+Wall.transform.position,Quaternion.Euler(0,180,0)) as GameObject;// back
 					tmp.transform.parent = transform;
+					if (column == Columns - 1 && !_isExit)
+					{
+						_isExit = true;
+						tmp.GetComponent<MeshRenderer>().enabled = false;
+						tmp.GetComponent<MeshCollider>().isTrigger = true;
+					}
 				}
-				
 			}
 		}
 		if(Pillar != null){
 			for (int row = 0; row < Rows+1; row++) {
 				for (int column = 0; column < Columns+1; column++) {
-					float x = column*(CellWidth+(AddGaps?.2f:0)) / _num;
-					float z = row*(CellHeight+(AddGaps?.2f:0)) / _num;
+					float x = column*(CellWidth+(AddGaps?.2f:0));
+					float z = row*(CellHeight+(AddGaps?.2f:0));
 					GameObject tmp = Instantiate(Pillar,new Vector3(x-CellWidth/2,0,z-CellHeight/2),Quaternion.identity) as GameObject;
 					tmp.transform.parent = transform;
 				}
 			}
 		}
-		isGenerate = true;
 	}
 }

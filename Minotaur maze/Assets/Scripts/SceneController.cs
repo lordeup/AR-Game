@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using Photon.Pun;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviourPunCallbacks
+public class SceneController : MonoBehaviour
 {
     public static void LoadScene(string sceneName)
     {
-        PhotonNetwork.LoadLevel(sceneName);
+        SceneManager.LoadScene(sceneName);
     }
 
     public delegate void DelegateWaitMethod();

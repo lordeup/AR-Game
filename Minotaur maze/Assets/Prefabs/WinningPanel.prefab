@@ -119,7 +119,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 94401117459319047}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8132409266762956180}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: MainMenu
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5864547046177148384
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,6 +277,7 @@ GameObject:
   - component: {fileID: 7377247939777999415}
   - component: {fileID: 7377247939777999413}
   - component: {fileID: 7377247939777999414}
+  - component: {fileID: 8132409266762956180}
   m_Layer: 5
   m_Name: WinningPanel
   m_TagString: Untagged
@@ -331,6 +344,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8132409266762956180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7377247939777999408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfe195f8ce75b4043a68c0e4c36771e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8364531272411524948
 GameObject:
   m_ObjectHideFlags: 0

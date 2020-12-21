@@ -4,5 +4,6 @@
     Warrior,
     Mage,
     Spectator,
-    Thread
+    Thread,
+    Wall
 }

@@ -15,11 +15,16 @@ public class WarriorPlayerControl : BasicPlayerControl
         {
             Animator.SetTrigger(Property);
         }
+
+        if (other.gameObject.CompareTag(GameObjectTag.Wall.ToString()))
+        {
+            WinGame();
+        }
     }
 
     protected override void WinGame()
     {
         Animator.SetTrigger(Jump);
-        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 1.5f));
+        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }
 }

@@ -22,6 +22,11 @@ public class MagePlayerControl : BasicPlayerControl
             ThreadCountControl.AddCount(5);
             Debug.Log("!@@@@@@@@@@ " + ThreadCountControl.GetCount());
         }
+
+        if (other.gameObject.CompareTag(GameObjectTag.Wall.ToString()))
+        {
+            WinGame();
+        }
     }
 
     private void RespawnPlayer()
@@ -39,6 +44,6 @@ public class MagePlayerControl : BasicPlayerControl
     protected override void WinGame()
     {
         Animator.SetTrigger(Jump);
-        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 1.5f));
+        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }
 }

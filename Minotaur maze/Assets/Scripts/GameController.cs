@@ -2,7 +2,6 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
@@ -30,15 +29,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
         gameObject.AddComponent<NavMeshRebaker>();
         BasicPlayerControl.WinningPanel = winningPanel;
-    }
-
-    private void Update()
-    {
-        if (_mazeSpawner.isGenerate)
-        {
-            var walls = GameObject.FindGameObjectsWithTag("Wall");
-            _mazeSpawner.isGenerate = false;
-        }
     }
 
     private void SetActive()
@@ -82,7 +72,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneController.LoadScene("MainMenu");
     }
 
     public void LeaveRoom()
