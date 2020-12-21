@@ -4,17 +4,19 @@ using UnityEngine;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     private SceneController _sceneController;
+    private MazeGenerator _mazeGenerator;
 
     private void Start()
     {
+        _mazeGenerator = gameObject.AddComponent<MazeGenerator>();
         _sceneController = gameObject.AddComponent<SceneController>();
     }
 
     public void CreateRoom()
     {
-        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions {MaxPlayers = 3});
+        _mazeGenerator.Initialize();
+        PhotonNetwork.CreateRoom(null, new Photon.Realtime.RoomOptions {MaxPlayers = 3, CustomRoomProperties = _mazeGenerator.GenerateCustomRoomProperties()});
         Debug.Log("Room created");
-        Helper.Initialize();
     }
 
     public void JoinRoom()
