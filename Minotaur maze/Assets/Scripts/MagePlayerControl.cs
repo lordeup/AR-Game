@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MagePlayerControl : BasicPlayerControl
 {
     private static readonly int Die = Animator.StringToHash("Die");
+    private static readonly int Jump = Animator.StringToHash("Jump");
 
     public MagePlayerControl() : base(GameObjectTag.Mage)
     {
@@ -14,7 +14,7 @@ public class MagePlayerControl : BasicPlayerControl
         if (other.gameObject.CompareTag(GameObjectTag.Monster.ToString()))
         {
             Animator.SetTrigger(Die);
-            StartCoroutine(RespawnPlayerAfterDelay());
+            StartCoroutine(SceneController.WaitMethod(RespawnPlayer, 2.5f));
         }
 
         if (other.gameObject.CompareTag(GameObjectTag.Thread.ToString()))
@@ -22,12 +22,11 @@ public class MagePlayerControl : BasicPlayerControl
             ThreadCountControl.AddCount(5);
             Debug.Log("!@@@@@@@@@@ " + ThreadCountControl.GetCount());
         }
-    }
 
-    private IEnumerator RespawnPlayerAfterDelay()
-    {
-        yield return new WaitForSeconds(2.5f);
-        RespawnPlayer();
+        if (other.gameObject.CompareTag(GameObjectTag.Wall.ToString()))
+        {
+            WinGame();
+        }
     }
 
     private void RespawnPlayer()
@@ -40,5 +39,11 @@ public class MagePlayerControl : BasicPlayerControl
         // Agent.nextPosition = InitPosition;
         Debug.Log(" 2) Agent.nextPosition " + Agent.nextPosition);
         Agent.ResetPath();
+    }
+
+    protected override void WinGame()
+    {
+        Animator.SetTrigger(Jump);
+        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }
 }

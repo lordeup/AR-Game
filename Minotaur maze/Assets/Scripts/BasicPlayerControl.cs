@@ -11,9 +11,9 @@ public abstract class BasicPlayerControl : MonoBehaviour
     protected Animator Animator;
 
     public static FixedJoystick Joystick;
+    public static RectTransform WinningPanel;
     public static ThreadCountControl ThreadCountControl;
 
-    private const float Speed = 20f;
     protected Vector3 InitPosition;
 
     protected readonly GameObjectTag ObjectTag;
@@ -39,13 +39,22 @@ public abstract class BasicPlayerControl : MonoBehaviour
     {
         // UpdateMainCamera();
         if (!_photonView.IsMine) return;
+        JoystickControl();
+    }
 
-        if (Math.Abs(Joystick.Horizontal) > 0.1f || Math.Abs(Joystick.Vertical) > 0.1f)
+    private void JoystickControl()
+    {
+        const float deviation = 0.1f;
+        const float speed = 20f;
+        var joystickHorizontal = Joystick.Horizontal;
+        var joystickVertical = Joystick.Vertical;
+
+        if (Math.Abs(joystickHorizontal) > deviation || Math.Abs(joystickVertical) > deviation)
         {
             var nextPosition = Agent.nextPosition;
-            var delta = Time.fixedDeltaTime * Speed;
-            var destination = new Vector3(nextPosition.x + Joystick.Horizontal * delta, nextPosition.y,
-                nextPosition.z + Joystick.Vertical * delta);
+            var delta = Time.fixedDeltaTime * speed;
+            var destination = new Vector3(nextPosition.x + joystickHorizontal * delta, nextPosition.y,
+                nextPosition.z + joystickVertical * delta);
 
             Agent.SetDestination(destination);
             Animator.SetBool(Run, true);
@@ -71,5 +80,12 @@ public abstract class BasicPlayerControl : MonoBehaviour
     //     _mainCamera.transform.LookAt(transform.position);
     // }
 
+    protected static void SetActiveWinningPanel()
+    {
+        WinningPanel.gameObject.SetActive(true);
+    }
+
     protected abstract void OnTriggerEnter(Collider other);
+
+    protected abstract void WinGame();
 }

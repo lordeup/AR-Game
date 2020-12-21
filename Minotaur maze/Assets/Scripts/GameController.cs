@@ -2,13 +2,13 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Transform prefabWarriorPlayer;
     [SerializeField] private Transform prefabMagePlayer;
     [SerializeField] private Transform prefabMonster;
+    [SerializeField] private RectTransform winningPanel;
     [SerializeField] private FixedJoystick joystick;
 
     private MazeSpawner _mazeSpawner;
@@ -28,15 +28,7 @@ public class GameController : MonoBehaviourPunCallbacks
         InitializationMonsters();
 
         gameObject.AddComponent<NavMeshRebaker>();
-    }
-
-    private void Update()
-    {
-        if (_mazeSpawner.isGenerate)
-        {
-            var walls = GameObject.FindGameObjectsWithTag("Wall");
-            _mazeSpawner.isGenerate = false;
-        }
+        BasicPlayerControl.WinningPanel = winningPanel;
     }
 
     private void SetActive()
@@ -80,7 +72,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneController.LoadScene("MainMenu");
     }
 
     public void LeaveRoom()
