@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -9,11 +10,15 @@ public class MazeGenerator : MonoBehaviour
     private readonly List<Vector3> _playersPosition = new List<Vector3>();
     private readonly List<Vector3> _monstersPosition = new List<Vector3>();
     private int _randomSeed;
-    
+
+    public MazeGenerator()
+    {
+        InitializeMonstersPosition();
+    }
+
     public void Initialize()
     {
         InitializePlayersPosition();
-        InitializeMonstersPosition();
         _randomSeed = Random.Range(1, 100);
     }
 
@@ -50,7 +55,6 @@ public class MazeGenerator : MonoBehaviour
         {
             {CustomPropertyKeys.RandomSeed.ToString(), _randomSeed},
             {CustomPropertyKeys.PlayersPositions.ToString(), _playersPosition.ToArray()},
-            {CustomPropertyKeys.MonstersPositions.ToString(), _monstersPosition.ToArray()}
         };
         return properties;
     }
@@ -83,22 +87,9 @@ public class MazeGenerator : MonoBehaviour
         return Vector3.one;
     }
 
-    public Vector3 GetRandomMonsterPosition()
+    public Vector3 GetPositionByIndex(int index)
     {
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(CustomPropertyKeys.MonstersPositions.ToString(), out object temp))
-        {
-            var positions = new List<Vector3>((Vector3[]) temp);
-            
-            var position = GetRandomPosition(positions);
-            
-            positions.Remove(position);
-
-            UpdateCustomPropertyByKey(CustomPropertyKeys.MonstersPositions, positions);
-            
-            return position;
-        }
-        
-        return Vector3.one;
+        return _monstersPosition[index];
     }
     
     private Vector3 GetRandomPosition(List<Vector3> positions)
@@ -117,6 +108,6 @@ public class MazeGenerator : MonoBehaviour
     
     private void UpdateCustomPropertyByKey(CustomPropertyKeys key, List<Vector3> positions)
     {
-        PhotonNetwork.CurrentRoom.CustomProperties[key.ToString()] = positions.ToArray();
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable {{key.ToString(), positions.ToArray()}});
     }
 }

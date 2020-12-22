@@ -1,5 +1,4 @@
 ﻿using Photon.Pun;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,8 +9,7 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private Transform prefabMonster;
     [SerializeField] private RectTransform winningPanel;
     [SerializeField] private FixedJoystick joystick;
-    [SerializeField] private TextMeshProUGUI text;
-    
+
     private MazeSpawner _mazeSpawner;
     private NavMeshSurface _navMeshSurface;
     private ThreadCountControl _threadCountControl;
@@ -28,11 +26,13 @@ public class GameController : MonoBehaviourPunCallbacks
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
         SetActive();
         InitializationPlayers();
-        InitializationMonsters();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            InitializationMonsters();
+        }
 
         gameObject.AddComponent<NavMeshRebaker>();
         BasicPlayerControl.WinningPanel = winningPanel;
-        
     }
 
     private void SetActive()
@@ -72,8 +72,8 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         for (var i = 0; i <= 10; ++i)
         {
-            var randomMonsterPosition = _mazeGenerator.GetRandomMonsterPosition();
-            Instantiate(prefabMonster, randomMonsterPosition, Quaternion.identity);
+            var position = _mazeGenerator.GetPositionByIndex(i);
+            PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
         }
     }
 
