@@ -15,8 +15,6 @@ public class GameController : MonoBehaviourPunCallbacks
     private ThreadCountControl _threadCountControl;
     private MazeGenerator _mazeGenerator;
 
-    private const int MaxNumberPlayers = 3;
-
     private void Start()
     {
         _mazeGenerator = gameObject.AddComponent<MazeGenerator>();
@@ -24,7 +22,9 @@ public class GameController : MonoBehaviourPunCallbacks
         _navMeshSurface = GetComponent<NavMeshSurface>();
 
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
-        SetActive();
+        _mazeSpawner.enabled = true;
+        _navMeshSurface.enabled = true;
+
         InitializationPlayers();
         if (PhotonNetwork.IsMasterClient)
         {
@@ -35,20 +35,14 @@ public class GameController : MonoBehaviourPunCallbacks
         BasicPlayerControl.WinningPanel = winningPanel;
     }
 
-    private void SetActive()
-    {
-        _mazeSpawner.enabled = true;
-        _navMeshSurface.enabled = true;
-    }
-
     private void InitializationPlayers()
     {
         var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        
-        if (playerCount == MaxNumberPlayers) return;
-        
+
+        if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
+
         var player = prefabWarriorPlayer;
-        
+
         if (playerCount > 1)
         {
             player = prefabMagePlayer;
