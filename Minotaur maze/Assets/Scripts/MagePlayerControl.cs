@@ -31,14 +31,8 @@ public class MagePlayerControl : BasicPlayerControl
 
     private void RespawnPlayer()
     {
-        // Agent.destination = Vector3.zero;
-        Debug.Log(" 1) RespawnPlayer " + InitPosition);
-        var transform1 = Agent.transform;
-        transform1.localPosition = InitPosition;
-        transform1.rotation = Quaternion.identity;
-        // Agent.nextPosition = InitPosition;
-        Debug.Log(" 2) Agent.nextPosition " + Agent.nextPosition);
-        Agent.ResetPath();
+        Agent.Warp(InitPosition);
+        Agent.transform.rotation = Quaternion.identity;
     }
 
     protected override void WinGame()

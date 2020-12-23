@@ -32,7 +32,6 @@ public abstract class BasicPlayerControl : MonoBehaviour
         Animator = GetComponent<Animator>();
 
         InitPosition = Agent.nextPosition;
-        Debug.Log(" Start " + InitPosition);
     }
 
     private void Update()
