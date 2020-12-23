@@ -8,7 +8,7 @@ public class ThreadCountControl : MonoBehaviour
 
     private void Start()
     {
-        _count = 10;
+        _count = 100;
     }
 
     public int GetCount()

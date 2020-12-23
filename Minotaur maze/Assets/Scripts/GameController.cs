@@ -1,5 +1,4 @@
-﻿using System;
-using Photon.Pun;
+﻿using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,41 +13,44 @@ public class GameController : MonoBehaviourPunCallbacks
     private MazeSpawner _mazeSpawner;
     private NavMeshSurface _navMeshSurface;
     private ThreadCountControl _threadCountControl;
-
-    private const int MaxNumberPlayers = 3;
+    private MazeGenerator _mazeGenerator;
 
     private void Start()
     {
+        _mazeGenerator = gameObject.AddComponent<MazeGenerator>();
         _mazeSpawner = GetComponent<MazeSpawner>();
         _navMeshSurface = GetComponent<NavMeshSurface>();
 
-        _mazeSpawner.RandomSeed = Helper.RandomSeed;
-        SetActive();
+        _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
+        _mazeSpawner.enabled = true;
+        _navMeshSurface.enabled = true;
+
         InitializationPlayers();
-        InitializationMonsters();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            InitializationMonsters();
+        }
 
         gameObject.AddComponent<NavMeshRebaker>();
         BasicPlayerControl.WinningPanel = winningPanel;
     }
 
-    private void SetActive()
-    {
-        _mazeSpawner.enabled = true;
-        _navMeshSurface.enabled = true;
-    }
-
     private void InitializationPlayers()
     {
         var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        if (playerCount == MaxNumberPlayers) return;
+
+        if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
+
         var player = prefabWarriorPlayer;
+
         if (playerCount > 1)
         {
             player = prefabMagePlayer;
         }
 
-        PhotonNetwork.Instantiate(player.name, Helper.GetRandomPlayerPosition(), Quaternion.identity);
-        Debug.Log("_playersPosition.Count " + Helper._playersPosition.Count);
+        var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
+
+        PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
 
         BasicPlayerControl.Joystick = joystick;
 
@@ -64,10 +66,9 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         for (var i = 0; i <= 10; ++i)
         {
-            Instantiate(prefabMonster, Helper.GetRandomMonsterPosition(), Quaternion.identity);
+            var position = _mazeGenerator.GetPositionByIndex(i);
+            PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
         }
-
-        Debug.Log("_monstersPosition.Count " + Helper._monstersPosition.Count);
     }
 
     public override void OnLeftRoom()

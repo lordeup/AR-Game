@@ -1067,6 +1067,8 @@ GameObject:
   - component: {fileID: 7323985710081087873}
   - component: {fileID: 8557171277953007415}
   - component: {fileID: 2746380697768744735}
+  - component: {fileID: 7556333366733518621}
+  - component: {fileID: 2409957466644202279}
   m_Layer: 9
   m_Name: Boximon Fiery
   m_TagString: Monster
@@ -1183,6 +1185,45 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.7210783, y: 1.993494, z: 1}
   m_Center: {x: 0.010795891, y: 0.49674702, z: 0}
+--- !u!114 &7556333366733518621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975194375736644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 0
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 2409957466644202279}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &2409957466644202279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975194375736644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1 &1992369794795074
 GameObject:
   m_ObjectHideFlags: 0
