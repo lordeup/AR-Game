@@ -58,7 +58,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
-            BasicPlayerControl.ThreadCountControl = _threadCountControl;
+            BasicPlayerControl.ThreadCount = _threadCountControl;
         }
     }
 

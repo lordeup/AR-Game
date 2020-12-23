@@ -18,12 +18,15 @@ public class MonsterControl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(GameObjectTag.Warrior.ToString()))
+        var isWarriorTag = other.CompareTag(GameObjectTag.Warrior.ToString());
+        var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
+
+        if (isWarriorTag)
         {
             _animator.SetTrigger(Die);
             StartCoroutine(SceneController.WaitMethod(Destroy, 0.5f));
         }
-        else if (other.gameObject.CompareTag(GameObjectTag.Mage.ToString()))
+        else if (isMageTag)
         {
             _animator.SetTrigger(Property);
         }

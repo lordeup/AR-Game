@@ -12,17 +12,11 @@ public abstract class BasicPlayerControl : MonoBehaviour
 
     public static FixedJoystick Joystick;
     public static RectTransform WinningPanel;
-    public static ThreadCountControl ThreadCountControl;
+    public static ThreadCountControl ThreadCount;
 
     protected Vector3 InitPosition;
 
-    protected readonly GameObjectTag ObjectTag;
     private static readonly int Run = Animator.StringToHash("Run");
-
-    protected BasicPlayerControl(GameObjectTag gameObjectTag)
-    {
-        ObjectTag = gameObjectTag;
-    }
 
     private void Start()
     {

@@ -5,20 +5,23 @@ public class WarriorPlayerControl : BasicPlayerControl
     private static readonly int Property = Animator.StringToHash("Attack 01");
     private static readonly int Jump = Animator.StringToHash("Jump");
 
-    public WarriorPlayerControl() : base(GameObjectTag.Warrior)
-    {
-    }
-
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(GameObjectTag.Monster.ToString()))
+        var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
+        var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
+
+        if (isMonsterTag)
         {
             Animator.SetTrigger(Property);
         }
 
-        if (other.gameObject.CompareTag(GameObjectTag.Wall.ToString()))
+        if (isWallTag)
         {
-            WinGame();
+            var meshCollider = other.GetComponent<MeshCollider>();
+            if (meshCollider.isTrigger)
+            {
+                WinGame();
+            }
         }
     }
 

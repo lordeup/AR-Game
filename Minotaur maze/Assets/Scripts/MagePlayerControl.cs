@@ -5,27 +5,33 @@ public class MagePlayerControl : BasicPlayerControl
     private static readonly int Die = Animator.StringToHash("Die");
     private static readonly int Jump = Animator.StringToHash("Jump");
 
-    public MagePlayerControl() : base(GameObjectTag.Mage)
-    {
-    }
-
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(GameObjectTag.Monster.ToString()))
+        var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
+        var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
+        var isThreadTag = other.CompareTag(GameObjectTag.Thread.ToString());
+
+        if (isMonsterTag)
         {
             Animator.SetTrigger(Die);
             StartCoroutine(SceneController.WaitMethod(RespawnPlayer, 2.5f));
         }
 
-        if (other.gameObject.CompareTag(GameObjectTag.Thread.ToString()))
+        if (isThreadTag)
         {
-            ThreadCountControl.AddCount(5);
-            Debug.Log("!@@@@@@@@@@ " + ThreadCountControl.GetCount());
+            // TODO если игрок с нитью подберет нить в мультиплеере возникает ошибка для игрока с мечом
+            // NullReferenceException: Object reference not set to an instance of an object
+            // ThreadCount.AddCount(5);
+            // Debug.Log("!@@@@@@@@@@ " + ThreadCount.GetCount());
         }
 
-        if (other.gameObject.CompareTag(GameObjectTag.Wall.ToString()))
+        if (isWallTag)
         {
-            WinGame();
+            var meshCollider = other.GetComponent<MeshCollider>();
+            if (meshCollider.isTrigger)
+            {
+                WinGame();
+            }
         }
     }
 

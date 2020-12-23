@@ -1351,6 +1351,7 @@ GameObject:
   - component: {fileID: 95785311282749608}
   - component: {fileID: 4345319340016424272}
   - component: {fileID: 6728999453300079979}
+  - component: {fileID: 2961582776151699002}
   - component: {fileID: 5554935869450068990}
   - component: {fileID: 427397977083287959}
   - component: {fileID: 1564387121696837593}
@@ -1420,6 +1421,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 6728999453300079979}
+  - {fileID: 2961582776151699002}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1439,6 +1441,48 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &2961582776151699002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757056487138150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: Walk
+  - Type: 4
+    SynchronizeType: 1
+    Name: Run
+  - Type: 9
+    SynchronizeType: 0
+    Name: Jump
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack 01
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack 02
+  - Type: 4
+    SynchronizeType: 0
+    Name: Defend
+  - Type: 9
+    SynchronizeType: 0
+    Name: Hit
+  - Type: 9
+    SynchronizeType: 0
+    Name: Die
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!195 &5554935869450068990
 NavMeshAgent:
   m_ObjectHideFlags: 0

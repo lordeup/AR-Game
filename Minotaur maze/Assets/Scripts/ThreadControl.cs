@@ -4,7 +4,9 @@ public class ThreadControl : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag(GameObjectTag.Mage.ToString()))
+        var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
+
+        if (isMageTag)
         {
             Destroy(gameObject);
         }
