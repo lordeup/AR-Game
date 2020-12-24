@@ -1541,6 +1541,7 @@ MonoBehaviour:
   CellHeight: 4
   AddGaps: 0
   GoalPrefab: {fileID: 2721802757036827256, guid: e509fcc380b08d140b23f87e236a9932, type: 3}
+  FloorList: []
 --- !u!114 &2044231489
 MonoBehaviour:
   m_ObjectHideFlags: 0

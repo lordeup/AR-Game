@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Packages.Rider.Editor.UnitTesting;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,6 +15,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
     public static FixedJoystick Joystick;
     public static RectTransform WinningPanel;
     public static ThreadCountControl ThreadCount;
+    public static List<Transform> FloorList;
 
     protected Vector3 InitPosition;
 
@@ -33,6 +36,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
         if (!_photonView.IsMine) return;
         UpdateMainCamera();
         JoystickControl();
+        UpdatePlayer();
     }
 
     private void JoystickControl()
@@ -81,4 +85,6 @@ public abstract class BasicPlayerControl : MonoBehaviour
     protected abstract void OnTriggerEnter(Collider other);
 
     protected abstract void WinGame();
+
+    protected abstract void UpdatePlayer();
 }

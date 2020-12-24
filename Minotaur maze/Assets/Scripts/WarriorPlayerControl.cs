@@ -30,4 +30,9 @@ public class WarriorPlayerControl : BasicPlayerControl
         Animator.SetTrigger(Jump);
         StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }
+
+    protected override void UpdatePlayer()
+    {
+        throw new System.NotImplementedException();
+    }
 }

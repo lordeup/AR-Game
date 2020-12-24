@@ -41,7 +41,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
 
-        var player = prefabWarriorPlayer;
+        var player = prefabMagePlayer;
 
         if (playerCount > 1)
         {
@@ -59,6 +59,7 @@ public class GameController : MonoBehaviourPunCallbacks
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
             BasicPlayerControl.ThreadCount = _threadCountControl;
+            BasicPlayerControl.FloorList = _mazeSpawner.FloorList;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 //<summary>
 //Game object, that creates maze and instantiates it in scene
@@ -26,6 +27,7 @@ public class MazeSpawner : MonoBehaviour {
 	public bool AddGaps = true;
 	public GameObject GoalPrefab = null;
 	private bool _isExit;
+	public List<Transform> FloorList;
 
 	private BasicMazeGenerator mMazeGenerator = null;
 
@@ -58,6 +60,9 @@ public class MazeSpawner : MonoBehaviour {
 				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
+				
+				FloorList.Add(tmp.transform);
+				
 				tmp.transform.parent = transform;
 
 				if (cell.IsGoal && GoalPrefab != null)
