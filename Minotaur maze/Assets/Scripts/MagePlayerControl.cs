@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Packages.Rider.Editor.UnitTesting;
 using UnityEngine;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public class MagePlayerControl : BasicPlayerControl
 {
     private static readonly int Die = Animator.StringToHash("Die");
     private static readonly int Jump = Animator.StringToHash("Jump");
+    
+    public static Toggle ThreadModeToggle;
+    public static List<LineRenderer> LineRenderers;
 
     private List<Transform> _distancePassed = new List<Transform>();
     private Transform _currentFloor;
+    private bool _isActiveThreadMode;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -56,13 +62,28 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void UpdatePlayer()
     {
+        if (!_isActiveThreadMode || ThreadCount.GetCount() == 0) return;
+        
         _currentFloor = GetCurrentFloor();
 
         if (_currentFloor != null)
         {
+            Debug.Log(LineRenderers);
             Debug.Log(_currentFloor.position);
             _distancePassed.Add(_currentFloor);
+            ThreadCount.UpdateCountOnDistancePassed();
         }
+    }
+
+    protected override void InitPlayer()
+    {
+        ThreadModeToggle.onValueChanged.AddListener(UpdateThreadMode);
+    }
+
+    private void UpdateThreadMode(bool value)
+    {
+        Debug.Log(value);
+        _isActiveThreadMode = value;
     }
 
     private Transform GetCurrentFloor()
@@ -79,13 +100,25 @@ public class MagePlayerControl : BasicPlayerControl
         });
     }
 
-    private bool IsCurrentFloorPosition(Bounds bounds, Vector3 currentPosition)
+    private static bool IsCurrentFloorPosition(Bounds bounds, Vector3 currentPosition)
     {
-        return currentPosition.sqrMagnitude > bounds.min.sqrMagnitude
-               && currentPosition.sqrMagnitude < bounds.max.sqrMagnitude;
+        var isWithinX = IsWithin(currentPosition.x, bounds.min.x, bounds.max.x);
+        var isWithinZ = IsWithin(currentPosition.z, bounds.min.z, bounds.max.z);
+
+        return isWithinX && isWithinZ;
     }
 
-    private bool IsPassed(Transform floor)
+    private static bool IsWithin<T>(T value, T minimum, T maximum) where T : IComparable<T>
+    {
+        if (value.CompareTo(minimum) < 0)
+        {
+            return false;
+        }
+
+        return value.CompareTo(maximum) <= 0;
+    }
+
+    private bool IsPassed(Object floor)
     {
         return _distancePassed.Any(item => item == floor);
     }

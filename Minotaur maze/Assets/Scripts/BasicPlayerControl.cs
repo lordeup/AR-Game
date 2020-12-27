@@ -29,6 +29,8 @@ public abstract class BasicPlayerControl : MonoBehaviour
         Animator = GetComponent<Animator>();
 
         InitPosition = Agent.nextPosition;
+
+        InitPlayer();
     }
 
     private void Update()
@@ -87,4 +89,6 @@ public abstract class BasicPlayerControl : MonoBehaviour
     protected abstract void WinGame();
 
     protected abstract void UpdatePlayer();
+    
+    protected abstract void InitPlayer();
 }

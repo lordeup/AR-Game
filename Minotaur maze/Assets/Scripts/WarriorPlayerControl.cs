@@ -35,4 +35,9 @@ public class WarriorPlayerControl : BasicPlayerControl
     {
         throw new System.NotImplementedException();
     }
+
+    protected override void InitPlayer()
+    {
+        throw new System.NotImplementedException();
+    }
 }

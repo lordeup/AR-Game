@@ -21,6 +21,11 @@ public class ThreadCountControl : MonoBehaviour
         _count += value;
     }
 
+    public void UpdateCountOnDistancePassed()
+    { 
+        if (_count != 0) --_count;
+    }
+
     private void Update()
     {
         countText.text = GetCount().ToString();
