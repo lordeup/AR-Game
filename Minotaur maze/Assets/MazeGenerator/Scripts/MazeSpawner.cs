@@ -54,7 +54,7 @@ public class MazeSpawner : MonoBehaviour {
 			break;
 		}
 		var lineRender = gameObject.AddComponent<LineRenderer>();
-		
+
 		mMazeGenerator.GenerateMaze ();
 		for (int row = 0; row < Rows; row++) {
 			for(int column = 0; column < Columns; column++){
@@ -63,9 +63,9 @@ public class MazeSpawner : MonoBehaviour {
 				MazeCell cell = mMazeGenerator.GetMazeCell(row,column);
 				GameObject tmp;
 				tmp = Instantiate(Floor,new Vector3(x,0,z), Quaternion.Euler(0,0,0)) as GameObject;
-				
+
 				tmp.transform.parent = transform;
-				
+
 				FloorList.Add(tmp.transform);
 
 				DrawLineRenderer(tmp, cell);
@@ -123,9 +123,9 @@ public class MazeSpawner : MonoBehaviour {
 	{
 		var colliderComponent = tmp.GetComponent<Collider>();
 		var line = new GameObject("line").AddComponent<LineRenderer>();
-		
+
 		line.alignment = LineAlignment.TransformZ;
-				
+
 		line.startWidth = 0.2f;
 		line.endWidth = 0.2f;
 
@@ -133,46 +133,72 @@ public class MazeSpawner : MonoBehaviour {
 		var boundsMin = bounds.min;
 		var boundsMax = bounds.max;
 		var boundsCenter = bounds.center;
-		
+
+		var points = new List<Vector3>();
+
 		if (cell.WallBack && cell.WallFront)
-		{ 
+		{
 			var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
 			var endPosition =  new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
-			line.SetPosition(0, startPosition); 
-			line.SetPosition(1, endPosition);
+			points.Add(startPosition);
+			points.Add(endPosition);
 		}
 		else if (cell.WallRight && cell.WallLeft)
 		{
 			var startPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
 			var endPosition =  new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
-			line.SetPosition(0, startPosition); 
-			line.SetPosition(1, endPosition);
+			points.Add(startPosition);
+			points.Add(endPosition);
 		}
 		else if (cell.WallRight && cell.WallBack)
 		{
 			var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
 			var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
-			line.positionCount = 3;
-			line.SetPosition(0, startPosition); 
-			line.SetPosition(1, boundsCenter);
-			line.SetPosition(2, endPosition);
+			points.Add(startPosition);
+			points.Add(boundsCenter);
+			points.Add(endPosition);
+		}
+		else if (cell.WallRight && cell.WallFront)
+		{
+			var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
+			var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMin.y, boundsMin.z);
+			points.Add(startPosition);
+			points.Add(boundsCenter);
+			points.Add(endPosition);
+		}
+		else if (cell.WallLeft && cell.WallFront)
+		{
+			var startPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+			var endPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
+			points.Add(startPosition);
+			points.Add(boundsCenter);
+			points.Add(endPosition);
 		}
 		else if (cell.WallBack && cell.WallLeft)
 		{
-			var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
-			var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
-			line.positionCount = 3;
-			line.SetPosition(0, startPosition); 
-			line.SetPosition(1, boundsCenter);
-			line.SetPosition(2, endPosition);
+			var startPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+			var endPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMax.z);
+			points.Add(startPosition);
+			points.Add(boundsCenter);
+			points.Add(endPosition);
 		}
-		else 
+		else if (cell.WallFront)
 		{
-			line.SetPosition(0, colliderComponent.bounds.min); 
-			line.SetPosition(1, colliderComponent.bounds.max);
+			var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
+			var endPosition =  new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+			points.Add(startPosition);
+			points.Add(endPosition);
 		}
-				
+		else
+		{
+			points.Add(boundsMin);
+			points.Add(boundsMax);
+		}
+
+		line.positionCount = points.Count;
+		line.SetPositions(points.ToArray());
+
 		LineRenderers.Add(line);
 	}
-	
+
 }
