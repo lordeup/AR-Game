@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Random = UnityEngine.Random;
 
 //<summary>
@@ -30,8 +31,8 @@ public class MazeSpawner : MonoBehaviour
     public bool AddGaps = true;
     public GameObject GoalPrefab;
     private bool _isExit;
-    public List<Transform> Floors;
-    public List<LineRenderer> LineRenderers;
+    public Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>(); 
+    const float lineWidth = 0.2f;
 
     private BasicMazeGenerator mMazeGenerator;
 
@@ -73,8 +74,6 @@ public class MazeSpawner : MonoBehaviour
                 var cell = mMazeGenerator.GetMazeCell(row, column);
                 var tmp = Instantiate(Floor, new Vector3(x, 0, z), Quaternion.Euler(0, 0, 0));
                 tmp.transform.parent = transform;
-
-                Floors.Add(tmp.transform);
 
                 DrawLineRenderer(tmp, cell);
 
@@ -143,19 +142,15 @@ public class MazeSpawner : MonoBehaviour
 
     private void DrawLineRenderer(GameObject tmp, MazeCell cell)
     {
-        const float lineWidth = 0.2f;
         var colliderComponent = tmp.GetComponent<Collider>();
-        var line = new GameObject("line").AddComponent<LineRenderer>();
-
-        line.alignment = LineAlignment.TransformZ;
-
-        line.startWidth = lineWidth;
-        line.endWidth = lineWidth;
+        var line = CreateLineRenderer();
 
         var bounds = colliderComponent.bounds;
         var boundsMin = bounds.min;
         var boundsMax = bounds.max;
         var boundsCenter = bounds.center;
+
+        var lines = new List<LineRenderer>();
 
         var points = new List<Vector3>();
 
@@ -222,17 +217,107 @@ public class MazeSpawner : MonoBehaviour
             var endPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
             points.Add(startPosition);
             points.Add(endPosition);
+            
+            var bottomPosition = new Vector3(boundsCenter.x + 0.1f, boundsMin.y, boundsMin.z);
+            var newPoints = new List<Vector3> {boundsCenter, bottomPosition};
+            CreateNewLine(newPoints, lines);
         }
         else
         {
-            points.Add(boundsMin);
-            points.Add(boundsMax);
+            if (cell.WallLeft)
+            {
+                var startPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+                points.Add(boundsCenter);
+                points.Add(startPosition);
+
+                var bottomPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
+                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+                var newPoints = new List<Vector3> {bottomPosition, topPosition};
+               
+                CreateNewLine(newPoints, lines);
+            } else if (cell.WallRight)
+            {
+                var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
+                points.Add(startPosition);
+                points.Add(boundsCenter);
+                
+                var bottomPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
+                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+
+                var newPoints = new List<Vector3> {bottomPosition, topPosition};
+               
+                CreateNewLine(newPoints, lines);
+            } else if (cell.WallBack)
+            {
+                var leftPosition = new Vector3(boundsMin.x, boundsMax.y, boundsCenter.z);
+                var rightPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+
+                points.Add(leftPosition);
+                points.Add(rightPosition);
+                
+                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+
+                var newPoints = new List<Vector3> {boundsCenter, topPosition};
+
+                CreateNewLine(newPoints, lines);
+            }
+            else
+            {
+                var leftPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
+                var rightPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+                points.Add(leftPosition);
+                points.Add(rightPosition);
+                
+                var bottomPosition = new Vector3(boundsMin.x, boundsMax.y, boundsCenter.z);
+                var topPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
+                
+                var newPoints = new List<Vector3> {bottomPosition, topPosition};
+
+                CreateNewLine(newPoints, lines);
+            }
         }
 
-        // line.enabled = false;
+        line.positionCount = points.Count;
+        line.SetPositions(points.ToArray());
+        lines.Add(line);
+
+        FloorsWithLines.Add(tmp.transform, lines);
+    }
+
+    private LineRenderer CreateLineRenderer()
+    {
+        var line = new GameObject("line").AddComponent<LineRenderer>();
+
+        line.alignment = LineAlignment.TransformZ;
+
+        line.startWidth = lineWidth;
+        line.endWidth = lineWidth;
+        
+        line.enabled = false;
+        
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        
+        Gradient gradient = new Gradient();
+        
+        float alpha = 1.0f;
+        
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.yellow, 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
+        );
+
+        line.colorGradient = gradient;
+
+        return line;
+    }
+
+    private void CreateNewLine(List<Vector3> points, List<LineRenderer> lines)
+    {
+        var line = CreateLineRenderer();
+
         line.positionCount = points.Count;
         line.SetPositions(points.ToArray());
 
-        LineRenderers.Add(line);
+        lines.Add(line);
     }
 }

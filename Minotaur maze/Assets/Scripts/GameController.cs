@@ -62,9 +62,8 @@ public class GameController : MonoBehaviourPunCallbacks
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
             MagePlayerControl.ThreadCountControls = _threadCountControl;
-            MagePlayerControl.Floors = _mazeSpawner.Floors;
             MagePlayerControl.ThreadModeToggle = threadModeToggle;
-            MagePlayerControl.LineRenderers = _mazeSpawner.LineRenderers;
+            MagePlayerControl.FloorsWithLines = _mazeSpawner.FloorsWithLines;
         }
     }
 

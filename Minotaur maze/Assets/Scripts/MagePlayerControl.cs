@@ -11,12 +11,11 @@ public class MagePlayerControl : BasicPlayerControl
 
     public static Toggle ThreadModeToggle;
     public static ThreadCountControl ThreadCountControls;
-    public static List<LineRenderer> LineRenderers;
-    public static List<Transform> Floors;
+    public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>(); 
 
     private readonly List<Transform> _distancePassed = new List<Transform>();
-    private readonly List<LineRenderer> _lineRendererPassed = new List<LineRenderer>();
-    private Transform _currentFloor;
+    private KeyValuePair<Transform, List<LineRenderer>> _previousFloorAndLines;
+    private KeyValuePair<Transform, List<LineRenderer>> _currentFloorAndLines;
     private bool _isActiveThreadMode;
 
     protected override void OnTriggerEnter(Collider other)
@@ -66,13 +65,32 @@ public class MagePlayerControl : BasicPlayerControl
     {
         if (!_isActiveThreadMode || ThreadCountControls.GetCount() == 0) return;
 
-        _currentFloor = GetCurrentFloor();
+        _currentFloorAndLines = GetCurrentFloorAndLines();
 
-        if (_currentFloor != null)
+        if (!IsEmptyKeyValuePair(_previousFloorAndLines)
+            && !IsEmptyKeyValuePair(_currentFloorAndLines)
+            && !_currentFloorAndLines.Equals(_previousFloorAndLines))
         {
-            Debug.Log(_currentFloor.position);
-            _distancePassed.Add(_currentFloor);
+            var floor = _previousFloorAndLines.Key;
+            Debug.Log(floor.position);
+            _distancePassed.Add(floor);
             ThreadCountControls.UpdateCountOnDistancePassed();
+            ActivateLines(_previousFloorAndLines.Value);
+        }
+
+        _previousFloorAndLines = _currentFloorAndLines;
+    }
+
+    private bool IsEmptyKeyValuePair(KeyValuePair<Transform, List<LineRenderer>> pair)
+    {
+        return pair.Equals(default(KeyValuePair<Transform, List<LineRenderer>>));
+    }
+
+    private void ActivateLines(List<LineRenderer> lines)
+    {
+        foreach (var line in lines)
+        {
+            line.enabled = true;
         }
     }
 
@@ -87,17 +105,19 @@ public class MagePlayerControl : BasicPlayerControl
         _isActiveThreadMode = value;
     }
 
-    private Transform GetCurrentFloor()
+    private KeyValuePair<Transform, List<LineRenderer>> GetCurrentFloorAndLines()
     {
         var currentPosition = Agent.transform.position;
 
-        return Floors.FirstOrDefault(item =>
+        return FloorsWithLines.FirstOrDefault(item =>
         {
-            var boxCollider = item.gameObject.GetComponent<BoxCollider>();
+            var floor = item.Key;
+            
+            var boxCollider = floor.gameObject.GetComponent<BoxCollider>();
 
             var bounds = boxCollider.bounds;
 
-            return IsCurrentFloorPosition(bounds, currentPosition) && !IsExists(_distancePassed, item);
+            return IsCurrentFloorPosition(bounds, currentPosition) && !IsExists(_distancePassed, floor);
         });
     }
 
