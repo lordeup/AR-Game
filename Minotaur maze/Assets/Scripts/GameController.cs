@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -60,8 +61,8 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
-            BasicPlayerControl.ThreadCount = _threadCountControl;
-            BasicPlayerControl.FloorList = _mazeSpawner.FloorList;
+            MagePlayerControl.ThreadCountControls = _threadCountControl;
+            MagePlayerControl.Floors = _mazeSpawner.Floors;
             MagePlayerControl.ThreadModeToggle = threadModeToggle;
             MagePlayerControl.LineRenderers = _mazeSpawner.LineRenderers;
         }

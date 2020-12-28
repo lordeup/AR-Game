@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 public class MagePlayerControl : BasicPlayerControl
 {
     private static readonly int Die = Animator.StringToHash("Die");
     private static readonly int Jump = Animator.StringToHash("Jump");
-    
-    public static Toggle ThreadModeToggle;
-    public static List<LineRenderer> LineRenderers;
 
-    private List<Transform> _distancePassed = new List<Transform>();
+    public static Toggle ThreadModeToggle;
+    public static ThreadCountControl ThreadCountControls;
+    public static List<LineRenderer> LineRenderers;
+    public static List<Transform> Floors;
+
+    private readonly List<Transform> _distancePassed = new List<Transform>();
+    private readonly List<LineRenderer> _lineRendererPassed = new List<LineRenderer>();
     private Transform _currentFloor;
     private bool _isActiveThreadMode;
 
@@ -33,9 +35,9 @@ public class MagePlayerControl : BasicPlayerControl
         {
             // TODO если игрок с нитью подберет нить в мультиплеере возникает ошибка для игрока с мечом
             // NullReferenceException: Object reference not set to an instance of an object
-            // ThreadCount.AddCount(5);
-            // Debug.Log("!@@@@@@@@@@ " + ThreadCount.GetCount());
-            ThreadCount.AddCount(5);
+            // ThreadCountControls.AddCount(5);
+            // Debug.Log("!@@@@@@@@@@ " + ThreadCountControls.GetCount());
+            ThreadCountControls.AddCount(5);
         }
 
         if (isWallTag)
@@ -47,7 +49,7 @@ public class MagePlayerControl : BasicPlayerControl
             }
         }
     }
-    
+
     private void RespawnPlayer()
     {
         Agent.Warp(InitPosition);
@@ -62,16 +64,15 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void UpdatePlayer()
     {
-        if (!_isActiveThreadMode || ThreadCount.GetCount() == 0) return;
-        
+        if (!_isActiveThreadMode || ThreadCountControls.GetCount() == 0) return;
+
         _currentFloor = GetCurrentFloor();
 
         if (_currentFloor != null)
         {
-            Debug.Log(LineRenderers);
             Debug.Log(_currentFloor.position);
             _distancePassed.Add(_currentFloor);
-            ThreadCount.UpdateCountOnDistancePassed();
+            ThreadCountControls.UpdateCountOnDistancePassed();
         }
     }
 
@@ -89,14 +90,14 @@ public class MagePlayerControl : BasicPlayerControl
     private Transform GetCurrentFloor()
     {
         var currentPosition = Agent.transform.position;
-        
-        return FloorList.FirstOrDefault(item =>
+
+        return Floors.FirstOrDefault(item =>
         {
             var boxCollider = item.gameObject.GetComponent<BoxCollider>();
 
             var bounds = boxCollider.bounds;
 
-            return IsCurrentFloorPosition(bounds, currentPosition) && !IsPassed(item);
+            return IsCurrentFloorPosition(bounds, currentPosition) && !IsExists(_distancePassed, item);
         });
     }
 
@@ -118,8 +119,8 @@ public class MagePlayerControl : BasicPlayerControl
         return value.CompareTo(maximum) <= 0;
     }
 
-    private bool IsPassed(Object floor)
+    private static bool IsExists<T>(IEnumerable<T> list, T value)
     {
-        return _distancePassed.Any(item => item == floor);
+        return list.Any(item => item.Equals(value));
     }
 }
