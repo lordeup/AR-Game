@@ -22,8 +22,11 @@ public class ThreadCountControl : MonoBehaviour
     }
 
     public void UpdateCountOnDistancePassed()
-    { 
-        if (_count != 0) --_count;
+    {
+        if (_count != 0)
+        {
+            _count -= 5;
+        }
     }
 
     private void Update()

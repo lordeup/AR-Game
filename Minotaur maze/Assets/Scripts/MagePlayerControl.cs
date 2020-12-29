@@ -11,7 +11,9 @@ public class MagePlayerControl : BasicPlayerControl
 
     public static Toggle ThreadModeToggle;
     public static ThreadCountControl ThreadCountControls;
-    public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>(); 
+
+    public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines =
+        new Dictionary<Transform, List<LineRenderer>>();
 
     private readonly List<Transform> _distancePassed = new List<Transform>();
     private KeyValuePair<Transform, List<LineRenderer>> _previousFloorAndLines;
@@ -81,12 +83,12 @@ public class MagePlayerControl : BasicPlayerControl
         _previousFloorAndLines = _currentFloorAndLines;
     }
 
-    private bool IsEmptyKeyValuePair(KeyValuePair<Transform, List<LineRenderer>> pair)
+    private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, List<LineRenderer>> pair)
     {
         return pair.Equals(default(KeyValuePair<Transform, List<LineRenderer>>));
     }
 
-    private void ActivateLines(List<LineRenderer> lines)
+    private static void ActivateLines(IEnumerable<LineRenderer> lines)
     {
         foreach (var line in lines)
         {
@@ -112,7 +114,7 @@ public class MagePlayerControl : BasicPlayerControl
         return FloorsWithLines.FirstOrDefault(item =>
         {
             var floor = item.Key;
-            
+
             var boxCollider = floor.gameObject.GetComponent<BoxCollider>();
 
             var bounds = boxCollider.bounds;

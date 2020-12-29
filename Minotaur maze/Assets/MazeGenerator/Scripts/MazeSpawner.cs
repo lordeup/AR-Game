@@ -31,8 +31,8 @@ public class MazeSpawner : MonoBehaviour
     public bool AddGaps = true;
     public GameObject GoalPrefab;
     private bool _isExit;
-    public Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>(); 
-    const float lineWidth = 0.2f;
+    public Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>();
+    private const float LineWidth = 0.2f;
 
     private BasicMazeGenerator mMazeGenerator;
 
@@ -142,6 +142,7 @@ public class MazeSpawner : MonoBehaviour
 
     private void DrawLineRenderer(GameObject tmp, MazeCell cell)
     {
+        const float offset = 0.1f;
         var colliderComponent = tmp.GetComponent<Collider>();
         var line = CreateLineRenderer();
 
@@ -175,14 +176,14 @@ public class MazeSpawner : MonoBehaviour
         else if (cell.WallRight && cell.WallLeft)
         {
             var startPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
-            var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+            var endPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
             points.Add(startPosition);
             points.Add(endPosition);
         }
         else if (cell.WallRight && cell.WallBack)
         {
             var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
-            var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+            var endPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
             points.Add(startPosition);
             points.Add(boundsCenter);
             points.Add(endPosition);
@@ -190,7 +191,7 @@ public class MazeSpawner : MonoBehaviour
         else if (cell.WallRight && cell.WallFront)
         {
             var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
-            var endPosition = new Vector3(boundsCenter.x + 0.1f, boundsMin.y, boundsMin.z);
+            var endPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMin.z);
             points.Add(startPosition);
             points.Add(boundsCenter);
             points.Add(endPosition);
@@ -198,7 +199,7 @@ public class MazeSpawner : MonoBehaviour
         else if (cell.WallLeft && cell.WallFront)
         {
             var startPosition = new Vector3(boundsMax.x, boundsMin.y, boundsCenter.z);
-            var endPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
+            var endPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
             points.Add(startPosition);
             points.Add(boundsCenter);
             points.Add(endPosition);
@@ -217,8 +218,8 @@ public class MazeSpawner : MonoBehaviour
             var endPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
             points.Add(startPosition);
             points.Add(endPosition);
-            
-            var bottomPosition = new Vector3(boundsCenter.x + 0.1f, boundsMin.y, boundsMin.z);
+
+            var bottomPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMin.z);
             var newPoints = new List<Vector3> {boundsCenter, bottomPosition};
             CreateNewLine(newPoints, lines);
         }
@@ -230,32 +231,34 @@ public class MazeSpawner : MonoBehaviour
                 points.Add(boundsCenter);
                 points.Add(startPosition);
 
-                var bottomPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
-                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+                var bottomPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
+                var topPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
                 var newPoints = new List<Vector3> {bottomPosition, topPosition};
-               
+
                 CreateNewLine(newPoints, lines);
-            } else if (cell.WallRight)
+            }
+            else if (cell.WallRight)
             {
                 var startPosition = new Vector3(boundsMin.x, boundsMin.y, boundsCenter.z);
                 points.Add(startPosition);
                 points.Add(boundsCenter);
-                
-                var bottomPosition = new Vector3(boundsCenter.x, boundsMin.y, boundsMin.z);
-                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+
+                var bottomPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
+                var topPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
 
                 var newPoints = new List<Vector3> {bottomPosition, topPosition};
-               
+
                 CreateNewLine(newPoints, lines);
-            } else if (cell.WallBack)
+            }
+            else if (cell.WallBack)
             {
                 var leftPosition = new Vector3(boundsMin.x, boundsMax.y, boundsCenter.z);
                 var rightPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
 
                 points.Add(leftPosition);
                 points.Add(rightPosition);
-                
-                var topPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+
+                var topPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
 
                 var newPoints = new List<Vector3> {boundsCenter, topPosition};
 
@@ -264,13 +267,13 @@ public class MazeSpawner : MonoBehaviour
             else
             {
                 var leftPosition = new Vector3(boundsCenter.x, boundsMax.y, boundsMin.z);
-                var rightPosition = new Vector3(boundsCenter.x + 0.1f, boundsMax.y, boundsMax.z);
+                var rightPosition = new Vector3(boundsCenter.x + offset, boundsMax.y, boundsMax.z);
                 points.Add(leftPosition);
                 points.Add(rightPosition);
-                
+
                 var bottomPosition = new Vector3(boundsMin.x, boundsMax.y, boundsCenter.z);
                 var topPosition = new Vector3(boundsMax.x, boundsMax.y, boundsCenter.z);
-                
+
                 var newPoints = new List<Vector3> {bottomPosition, topPosition};
 
                 CreateNewLine(newPoints, lines);
@@ -284,34 +287,25 @@ public class MazeSpawner : MonoBehaviour
         FloorsWithLines.Add(tmp.transform, lines);
     }
 
-    private LineRenderer CreateLineRenderer()
+    private static LineRenderer CreateLineRenderer()
     {
         var line = new GameObject("line").AddComponent<LineRenderer>();
 
         line.alignment = LineAlignment.TransformZ;
 
-        line.startWidth = lineWidth;
-        line.endWidth = lineWidth;
-        
-        line.enabled = false;
-        
-        line.material = new Material(Shader.Find("Sprites/Default"));
-        
-        Gradient gradient = new Gradient();
-        
-        float alpha = 1.0f;
-        
-        gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.yellow, 1.0f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 0.0f), new GradientAlphaKey(alpha, 1.0f) }
-        );
+        line.startWidth = LineWidth;
+        line.endWidth = LineWidth;
 
-        line.colorGradient = gradient;
+        line.enabled = false;
+
+        line.material = new Material(Shader.Find("Sprites/Default"));
+        line.startColor = Color.yellow;
+        line.endColor = Color.yellow;
 
         return line;
     }
 
-    private void CreateNewLine(List<Vector3> points, List<LineRenderer> lines)
+    private static void CreateNewLine(List<Vector3> points, ICollection<LineRenderer> lines)
     {
         var line = CreateLineRenderer();
 
