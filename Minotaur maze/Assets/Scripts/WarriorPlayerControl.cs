@@ -13,6 +13,7 @@ public class WarriorPlayerControl : BasicPlayerControl
         if (isMonsterTag)
         {
             Animator.SetTrigger(Property);
+            SoundManager.PlayFightSound();
         }
 
         if (isWallTag)

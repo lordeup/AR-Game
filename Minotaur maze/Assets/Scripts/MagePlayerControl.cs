@@ -32,12 +32,8 @@ public class MagePlayerControl : BasicPlayerControl
             StartCoroutine(SceneController.WaitMethod(RespawnPlayer, 2.5f));
         }
 
-        if (isThreadTag)
+        if (isThreadTag && ThreadCountControls != null)
         {
-            // TODO если игрок с нитью подберет нить в мультиплеере возникает ошибка для игрока с мечом
-            // NullReferenceException: Object reference not set to an instance of an object
-            // ThreadCountControls.AddCount(5);
-            // Debug.Log("!@@@@@@@@@@ " + ThreadCountControls.GetCount());
             ThreadCountControls.AddCount(5);
         }
 
@@ -98,7 +94,10 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void InitPlayer()
     {
-        ThreadModeToggle.onValueChanged.AddListener(UpdateThreadMode);
+        if (ThreadModeToggle != null)
+        {
+            ThreadModeToggle.onValueChanged.AddListener(UpdateThreadMode);
+        }
     }
 
     private void UpdateThreadMode(bool value)

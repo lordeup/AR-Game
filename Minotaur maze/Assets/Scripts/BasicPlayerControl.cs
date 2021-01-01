@@ -14,8 +14,14 @@ public abstract class BasicPlayerControl : MonoBehaviour
     public static RectTransform WinningPanel;
 
     protected Vector3 InitPosition;
+    protected SoundManager SoundManager;
 
     private static readonly int Run = Animator.StringToHash("Run");
+
+    private void Awake()
+    {
+        SoundManager = FindObjectOfType<SoundManager>();
+    }
 
     private void Start()
     {
@@ -53,10 +59,12 @@ public abstract class BasicPlayerControl : MonoBehaviour
 
             Agent.SetDestination(destination);
             Animator.SetBool(Run, true);
+            SoundManager.PlayWalkingSound();
         }
         else
         {
             Animator.SetBool(Run, false);
+            SoundManager.Stop();
         }
     }
 
