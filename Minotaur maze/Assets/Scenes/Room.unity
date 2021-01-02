@@ -1347,8 +1347,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1387204707}
-  walkingClip: {fileID: 8300000, guid: ab7f0a9be3e401e4bb84a4c75afb06b2, type: 3}
-  fightClip: {fileID: 8300000, guid: fb302fbe8fa3fd9499433d1e933865d4, type: 3}
+  walkingClip: {fileID: 8300000, guid: ec40b285e557f48478b299e13f20c89f, type: 3}
+  fightClip: {fileID: 8300000, guid: 14a37dd966b7b924fb800b3f0f2cb8b4, type: 3}
 --- !u!82 &1387204707
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1816,7 +1816,7 @@ MonoBehaviour:
   CellWidth: 3
   CellHeight: 4
   AddGaps: 0
-  GoalPrefab: {fileID: 919132149155446097, guid: 06db9241cdca2124f985b1328d20a2ec, type: 3}
+  GoalPrefab: {fileID: 3024032193902849234, guid: 7cafb8ceaeeca3e4cbe044ded69a39a5, type: 3}
 --- !u!114 &2044231489
 MonoBehaviour:
   m_ObjectHideFlags: 0
