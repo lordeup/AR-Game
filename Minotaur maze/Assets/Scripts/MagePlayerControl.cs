@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MagePlayerControl : BasicPlayerControl
 {
     private static readonly int Die = Animator.StringToHash("Die");
     private static readonly int Jump = Animator.StringToHash("Jump");
 
-    public static Toggle ThreadModeToggle;
     public static ThreadCountControl ThreadCountControls;
 
     public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines =
@@ -18,7 +16,6 @@ public class MagePlayerControl : BasicPlayerControl
     private readonly List<Transform> _distancePassed = new List<Transform>();
     private KeyValuePair<Transform, List<LineRenderer>> _previousFloorAndLines;
     private KeyValuePair<Transform, List<LineRenderer>> _currentFloorAndLines;
-    private bool _isActiveThreadMode;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -61,7 +58,12 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void UpdatePlayer()
     {
-        if (!_isActiveThreadMode || ThreadCountControls.GetCount() == 0) return;
+        if (ThreadCountControls == null ||
+            !ThreadCountControls.GetActiveThreadMode() ||
+            ThreadCountControls.GetCount() == 0)
+        {
+            return;
+        }
 
         _currentFloorAndLines = GetCurrentFloorAndLines();
 
@@ -94,16 +96,6 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void InitPlayer()
     {
-        if (ThreadModeToggle != null)
-        {
-            ThreadModeToggle.onValueChanged.AddListener(UpdateThreadMode);
-        }
-    }
-
-    private void UpdateThreadMode(bool value)
-    {
-        Debug.Log(value);
-        _isActiveThreadMode = value;
     }
 
     private KeyValuePair<Transform, List<LineRenderer>> GetCurrentFloorAndLines()

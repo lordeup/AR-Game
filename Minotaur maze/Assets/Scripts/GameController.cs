@@ -2,7 +2,6 @@
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
@@ -11,7 +10,6 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private Transform prefabMonster;
     [SerializeField] private RectTransform winningPanel;
     [SerializeField] private FixedJoystick joystick;
-    [SerializeField] private Toggle threadModeToggle;
 
     private MazeSpawner _mazeSpawner;
     private NavMeshSurface _navMeshSurface;
@@ -61,9 +59,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
-            threadModeToggle.gameObject.SetActive(true);
             MagePlayerControl.ThreadCountControls = _threadCountControl;
-            MagePlayerControl.ThreadModeToggle = threadModeToggle;
             MagePlayerControl.FloorsWithLines = _mazeSpawner.FloorsWithLines;
         }
     }

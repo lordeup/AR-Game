@@ -1,19 +1,30 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThreadCountControl : MonoBehaviour
 {
+    [SerializeField] private Button threadModeButton;
+
     private int _count;
-    [SerializeField] private TextMeshProUGUI countText;
+    private bool _isActiveThreadMode;
+    private TextMeshProUGUI _countText;
 
     private void Start()
     {
         _count = 100;
+        threadModeButton.gameObject.SetActive(true);
+        _countText = threadModeButton.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public int GetCount()
     {
         return _count;
+    }
+
+    public bool GetActiveThreadMode()
+    {
+        return _isActiveThreadMode;
     }
 
     public void AddCount(int value)
@@ -29,8 +40,13 @@ public class ThreadCountControl : MonoBehaviour
         }
     }
 
+    public void UpdateThreadMode()
+    {
+        _isActiveThreadMode = !_isActiveThreadMode;
+    }
+
     private void Update()
     {
-        countText.text = GetCount().ToString();
+        _countText.text = GetCount().ToString();
     }
 }
