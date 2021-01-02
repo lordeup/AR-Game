@@ -42,7 +42,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
 
-        var player = prefabWarriorPlayer;
+        var player = prefabMagePlayer;
 
         if (playerCount > 1)
         {

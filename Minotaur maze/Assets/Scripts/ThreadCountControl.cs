@@ -10,10 +10,20 @@ public class ThreadCountControl : MonoBehaviour
     private bool _isActiveThreadMode;
     private TextMeshProUGUI _countText;
 
+    private Image _image;
+
+    private readonly Color _disabledColor = Color.grey;
+
     private void Start()
     {
         _count = 100;
+        
+        _image = threadModeButton.GetComponent<Image>();
+        
+        _image.color = _disabledColor;
+
         threadModeButton.gameObject.SetActive(true);
+        
         _countText = threadModeButton.GetComponentInChildren<TextMeshProUGUI>();
     }
 
@@ -43,6 +53,7 @@ public class ThreadCountControl : MonoBehaviour
     public void UpdateThreadMode()
     {
         _isActiveThreadMode = !_isActiveThreadMode;
+        _image.color = _isActiveThreadMode ? Color.white : _disabledColor;
     }
 
     private void Update()
