@@ -41,7 +41,7 @@ public class MazeSpawner : MonoBehaviour
     {
         if (!FullRandom)
         {
-            Random.seed = RandomSeed;
+            Random.InitState(RandomSeed);
         }
 
         switch (Algorithm)
@@ -89,7 +89,6 @@ public class MazeSpawner : MonoBehaviour
                 {
                     tmp = Instantiate(Wall, new Vector3(x + CellWidth / 2, 0, z) + Wall.transform.position,
                         Quaternion.Euler(0, 90, 0));
-                    tmp.tag = "RightWall";
                     tmp.transform.parent = transform;
                 }
 
@@ -97,7 +96,6 @@ public class MazeSpawner : MonoBehaviour
                 {
                     tmp = Instantiate(Wall, new Vector3(x, 0, z + CellHeight / 2) + Wall.transform.position,
                         Quaternion.Euler(0, 0, 0));
-                    tmp.tag = "FrontWall";
                     tmp.transform.parent = transform;
                 }
 
@@ -105,7 +103,6 @@ public class MazeSpawner : MonoBehaviour
                 {
                     tmp = Instantiate(Wall, new Vector3(x - CellWidth / 2, 0, z) + Wall.transform.position,
                         Quaternion.Euler(0, 270, 0));
-                    tmp.tag = "LeftWall";
                     tmp.transform.parent = transform;
                 }
 
@@ -113,7 +110,6 @@ public class MazeSpawner : MonoBehaviour
                 {
                     tmp = Instantiate(Wall, new Vector3(x, 0, z - CellHeight / 2) + Wall.transform.position,
                         Quaternion.Euler(0, 180, 0));
-                    tmp.tag = "BackWall";
                     tmp.transform.parent = transform;
                     if (column == Columns - 1 && !_isExit)
                     {

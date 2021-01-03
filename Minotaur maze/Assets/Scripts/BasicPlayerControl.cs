@@ -5,18 +5,20 @@ using UnityEngine.AI;
 
 public abstract class BasicPlayerControl : MonoBehaviour
 {
-    private Camera _mainCamera;
-    protected NavMeshAgent Agent;
-    private PhotonView _photonView;
-    protected Animator Animator;
-
     public static FixedJoystick Joystick;
     public static RectTransform WinningPanel;
 
+    protected NavMeshAgent Agent;
+    protected Animator Animator;
     protected Vector3 InitPosition;
     protected SoundManager SoundManager;
+    protected bool IsDead;
+
+    private Camera _mainCamera;
+    private PhotonView _photonView;
 
     private static readonly int Run = Animator.StringToHash("Run");
+    private static readonly int Jump = Animator.StringToHash("Jump");
 
     private void Awake()
     {
@@ -25,19 +27,18 @@ public abstract class BasicPlayerControl : MonoBehaviour
 
     private void Start()
     {
-        _mainCamera = Camera.main;
         Agent = GetComponent<NavMeshAgent>();
-        _photonView = GetComponent<PhotonView>();
         Animator = GetComponent<Animator>();
-
         InitPosition = Agent.nextPosition;
 
-        InitPlayer();
+        _mainCamera = Camera.main;
+        _photonView = GetComponent<PhotonView>();
     }
 
     private void Update()
     {
-        if (!_photonView.IsMine) return;
+        if (!_photonView.IsMine || IsDead) return;
+
         UpdateMainCamera();
         JoystickControl();
         UpdatePlayer();
@@ -83,16 +84,21 @@ public abstract class BasicPlayerControl : MonoBehaviour
         _mainCamera.transform.LookAt(transform.position);
     }
 
-    protected static void SetActiveWinningPanel()
+    protected void WinGame()
+    {
+        if (!_photonView.IsMine) return;
+
+        Animator.SetTrigger(Jump);
+        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
+        SceneController.PhotonView = _photonView;
+    }
+
+    private static void SetActiveWinningPanel()
     {
         WinningPanel.gameObject.SetActive(true);
     }
 
     protected abstract void OnTriggerEnter(Collider other);
 
-    protected abstract void WinGame();
-
     protected abstract void UpdatePlayer();
-
-    protected abstract void InitPlayer();
 }

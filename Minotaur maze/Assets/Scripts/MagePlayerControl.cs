@@ -6,7 +6,6 @@ using UnityEngine;
 public class MagePlayerControl : BasicPlayerControl
 {
     private static readonly int Die = Animator.StringToHash("Die");
-    private static readonly int Jump = Animator.StringToHash("Jump");
 
     public static ThreadCountControl ThreadCountControls;
 
@@ -25,6 +24,7 @@ public class MagePlayerControl : BasicPlayerControl
 
         if (isMonsterTag)
         {
+            IsDead = true;
             Animator.SetTrigger(Die);
             StartCoroutine(SceneController.WaitMethod(RespawnPlayer, 2.5f));
         }
@@ -48,12 +48,7 @@ public class MagePlayerControl : BasicPlayerControl
     {
         Agent.Warp(InitPosition);
         Agent.transform.rotation = Quaternion.identity;
-    }
-
-    protected override void WinGame()
-    {
-        Animator.SetTrigger(Jump);
-        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
+        IsDead = false;
     }
 
     protected override void UpdatePlayer()
@@ -72,7 +67,6 @@ public class MagePlayerControl : BasicPlayerControl
             && !_currentFloorAndLines.Equals(_previousFloorAndLines))
         {
             var floor = _previousFloorAndLines.Key;
-            Debug.Log(floor.position);
             _distancePassed.Add(floor);
             ThreadCountControls.UpdateCountOnDistancePassed();
             ActivateLines(_previousFloorAndLines.Value);
@@ -94,10 +88,6 @@ public class MagePlayerControl : BasicPlayerControl
         }
     }
 
-    protected override void InitPlayer()
-    {
-    }
-
     private KeyValuePair<Transform, List<LineRenderer>> GetCurrentFloorAndLines()
     {
         var currentPosition = Agent.transform.position;
@@ -108,9 +98,7 @@ public class MagePlayerControl : BasicPlayerControl
 
             var boxCollider = floor.gameObject.GetComponent<BoxCollider>();
 
-            var bounds = boxCollider.bounds;
-
-            return IsCurrentFloorPosition(bounds, currentPosition) && !IsExists(_distancePassed, floor);
+            return IsCurrentFloorPosition(boxCollider.bounds, currentPosition) && !IsExists(_distancePassed, floor);
         });
     }
 

@@ -3,7 +3,6 @@
 public class WarriorPlayerControl : BasicPlayerControl
 {
     private static readonly int Property = Animator.StringToHash("Attack 01");
-    private static readonly int Jump = Animator.StringToHash("Jump");
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -26,17 +25,7 @@ public class WarriorPlayerControl : BasicPlayerControl
         }
     }
 
-    protected override void WinGame()
-    {
-        Animator.SetTrigger(Jump);
-        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
-    }
-
     protected override void UpdatePlayer()
-    {
-    }
-
-    protected override void InitPlayer()
     {
     }
 }

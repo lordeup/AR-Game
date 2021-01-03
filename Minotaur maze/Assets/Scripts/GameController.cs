@@ -3,7 +3,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GameController : MonoBehaviourPunCallbacks
+public class GameController : MonoBehaviour
 {
     [SerializeField] private Transform prefabWarriorPlayer;
     [SerializeField] private Transform prefabMagePlayer;
@@ -42,7 +42,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
 
-        var player = prefabMagePlayer;
+        var player = prefabWarriorPlayer;
 
         if (playerCount > 1)
         {
@@ -51,7 +51,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
-        PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
+        PhotonNetwork.Instantiate(player.name, new Vector3(30, 0, 0), Quaternion.identity);
 
         BasicPlayerControl.Joystick = joystick;
 
@@ -71,11 +71,6 @@ public class GameController : MonoBehaviourPunCallbacks
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
         }
-    }
-
-    public override void OnLeftRoom()
-    {
-        SceneController.LoadScene("MainMenu");
     }
 
     public void LeaveRoom()

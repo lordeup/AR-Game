@@ -8,12 +8,12 @@ public class SoundManager : MonoBehaviour
 
     public void PlayWalkingSound()
     {
-        audioSource.PlayOneShot(walkingClip);
+        // audioSource.PlayOneShot(walkingClip);
     }
 
     public void PlayFightSound()
     {
-        audioSource.PlayOneShot(fightClip);
+        // audioSource.PlayOneShot(fightClip);
     }
 
     public void Stop()
