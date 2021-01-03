@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     private NavMeshSurface _navMeshSurface;
     private ThreadCountControl _threadCountControl;
     private MazeGenerator _mazeGenerator;
+    private PlayerType _playerType;
 
     private void Start()
     {
@@ -25,6 +26,8 @@ public class GameController : MonoBehaviour
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
         _mazeSpawner.enabled = true;
         _navMeshSurface.enabled = true;
+
+        _playerType = PlayerSelectionManager.PlayerType;
 
         InitializationPlayers();
         if (PhotonNetwork.IsMasterClient)
@@ -38,21 +41,15 @@ public class GameController : MonoBehaviour
 
     private void InitializationPlayers()
     {
-        var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        var player = GetPlayer(_playerType);
 
-        if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
-
-        var player = prefabWarriorPlayer;
-
-        if (playerCount > 1)
-        {
-            player = prefabMagePlayer;
-        }
+        if (player == null) return;
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
-        PhotonNetwork.Instantiate(player.name, new Vector3(30, 0, 0), Quaternion.identity);
+        PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
 
+        joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
 
         if (player.CompareTag(GameObjectTag.Mage.ToString()))
@@ -64,6 +61,21 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private Transform GetPlayer(PlayerType playerType)
+    {
+        switch (playerType)
+        {
+            case PlayerType.Mage:
+                return prefabMagePlayer;
+            case PlayerType.Warrior:
+                return prefabWarriorPlayer;
+            case PlayerType.Spectator:
+                return null;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
+        }
+    }
+
     private void InitializationMonsters()
     {
         for (var i = 0; i <= 10; ++i)
@@ -71,10 +83,5 @@ public class GameController : MonoBehaviour
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
         }
-    }
-
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
     }
 }

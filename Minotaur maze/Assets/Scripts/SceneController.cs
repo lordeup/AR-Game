@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviourPunCallbacks
 {
-    public static PhotonView PhotonView;
-
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -22,9 +20,11 @@ public class SceneController : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
-        if (PhotonView != null && PhotonView.IsMine)
-        {
-            LoadScene("MainMenu");
-        }
+        LoadScene("PlayerSelection");
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 }

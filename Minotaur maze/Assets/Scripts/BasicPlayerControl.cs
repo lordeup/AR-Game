@@ -90,7 +90,6 @@ public abstract class BasicPlayerControl : MonoBehaviour
 
         Animator.SetTrigger(Jump);
         StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
-        SceneController.PhotonView = _photonView;
     }
 
     private static void SetActiveWinningPanel()

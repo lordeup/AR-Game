@@ -1,6 +1,6 @@
 ﻿public enum PlayerType
 {
-    WithWeapon,
-    WithThread,
-    Observer
+    Warrior,
+    Mage,
+    Spectator
 }
