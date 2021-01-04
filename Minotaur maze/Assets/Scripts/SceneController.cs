@@ -18,6 +18,11 @@ public class SceneController : MonoBehaviourPunCallbacks
         method?.Invoke();
     }
 
+    public static bool IsNull(Object obj)
+    {
+        return obj == null;
+    }
+
     public override void OnLeftRoom()
     {
         LoadScene("PlayerSelection");

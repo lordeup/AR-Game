@@ -22,15 +22,17 @@ public class MagePlayerControl : BasicPlayerControl
         var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
         var isThreadTag = other.CompareTag(GameObjectTag.Thread.ToString());
 
-        if (isMonsterTag)
+        if (isMonsterTag && !IsDead)
         {
             IsDead = true;
             Animator.SetTrigger(Die);
+            SoundManager.PlayDeathSound();
             StartCoroutine(SceneController.WaitMethod(RespawnPlayer, 2.5f));
         }
 
-        if (isThreadTag && ThreadCountControls != null)
+        if (isThreadTag && !SceneController.IsNull(ThreadCountControls))
         {
+            SoundManager.PlayThreadSound();
             ThreadCountControls.AddCount(5);
         }
 
@@ -53,7 +55,7 @@ public class MagePlayerControl : BasicPlayerControl
 
     protected override void UpdatePlayer()
     {
-        if (ThreadCountControls == null ||
+        if (SceneController.IsNull(ThreadCountControls) ||
             !ThreadCountControls.GetActiveThreadMode() ||
             ThreadCountControls.GetCount() == 0)
         {

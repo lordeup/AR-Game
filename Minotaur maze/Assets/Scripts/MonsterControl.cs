@@ -4,7 +4,7 @@ public class MonsterControl : MonoBehaviour
 {
     private Animator _animator;
     private static readonly int Die = Animator.StringToHash("Die");
-    private static readonly int Property = Animator.StringToHash("Attack 01");
+    private static readonly int Attack = Animator.StringToHash("Attack 01");
 
     private void Start()
     {
@@ -28,7 +28,7 @@ public class MonsterControl : MonoBehaviour
         }
         else if (isMageTag)
         {
-            _animator.SetTrigger(Property);
+            _animator.SetTrigger(Attack);
         }
     }
 }

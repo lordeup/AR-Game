@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class VisibilityAroundPlayer : MonoBehaviour
 {
@@ -11,11 +9,21 @@ public class VisibilityAroundPlayer : MonoBehaviour
     // По итогу скрипт будет отображать все объекты, которые попадают в наш коллайдер-триггер
     private void OnTriggerExit(Collider other)
     {
-        other.gameObject.GetComponent<Renderer>().enabled = false;
+        var component = other.GetComponent<Renderer>();
+
+        if (!SceneController.IsNull(component))
+        {
+            component.enabled = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        other.gameObject.GetComponent<Renderer>().enabled = true;
+        var component = other.GetComponent<Renderer>();
+
+        if (!SceneController.IsNull(component))
+        {
+            component.enabled = true;
+        }
     }
 }

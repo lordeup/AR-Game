@@ -20,15 +20,11 @@ public abstract class BasicPlayerControl : MonoBehaviour
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int Jump = Animator.StringToHash("Jump");
 
-    private void Awake()
-    {
-        SoundManager = FindObjectOfType<SoundManager>();
-    }
-
     private void Start()
     {
         Agent = GetComponent<NavMeshAgent>();
         Animator = GetComponent<Animator>();
+        SoundManager = GetComponent<SoundManager>();
         InitPosition = Agent.nextPosition;
 
         _mainCamera = Camera.main;
@@ -88,6 +84,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
     {
         if (!_photonView.IsMine) return;
 
+        SoundManager.PlayWinSound();
         Animator.SetTrigger(Jump);
         StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }

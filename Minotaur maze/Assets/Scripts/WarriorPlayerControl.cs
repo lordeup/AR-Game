@@ -2,7 +2,7 @@
 
 public class WarriorPlayerControl : BasicPlayerControl
 {
-    private static readonly int Property = Animator.StringToHash("Attack 01");
+    private static readonly int Attack = Animator.StringToHash("Attack 01");
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -11,7 +11,7 @@ public class WarriorPlayerControl : BasicPlayerControl
 
         if (isMonsterTag)
         {
-            Animator.SetTrigger(Property);
+            Animator.SetTrigger(Attack);
             SoundManager.PlayFightSound();
         }
 

@@ -43,7 +43,7 @@ public class GameController : MonoBehaviour
     {
         var player = GetPlayer(_playerType);
 
-        if (player == null) return;
+        if (SceneController.IsNull(player)) return;
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
@@ -52,7 +52,7 @@ public class GameController : MonoBehaviour
         joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
 
-        if (player.CompareTag(GameObjectTag.Mage.ToString()))
+        if (_playerType == PlayerType.Mage)
         {
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
