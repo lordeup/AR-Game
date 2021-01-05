@@ -22,6 +22,9 @@ public class MagePlayerControl : BasicPlayerControl
         var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
         var isThreadTag = other.CompareTag(GameObjectTag.Thread.ToString());
 
+        var distance = Vector3.Distance(transform.position, other.transform.position);
+        if (distance > SceneController.MinDistanceCollider) return;
+
         if (isMonsterTag && !IsDead)
         {
             IsDead = true;

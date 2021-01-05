@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,6 +8,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
 {
     public static FixedJoystick Joystick;
     public static RectTransform WinningPanel;
+    public static List<GameObject> MazeElements = new List<GameObject>();
 
     protected NavMeshAgent Agent;
     protected Animator Animator;

@@ -32,6 +32,9 @@ public class MazeSpawner : MonoBehaviour
     public GameObject GoalPrefab;
     private bool _isExit;
     public Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>();
+
+    private readonly List<GameObject> _mazeElements = new List<GameObject>();
+
     private const float LineWidth = 0.05f;
     private const float PointY = 0.05f;
 
@@ -75,6 +78,7 @@ public class MazeSpawner : MonoBehaviour
                 var cell = mMazeGenerator.GetMazeCell(row, column);
                 var tmp = Instantiate(Floor, new Vector3(x, 0, z), Quaternion.Euler(0, 0, 0));
                 tmp.transform.parent = transform;
+                AddMazeElement(tmp);
 
                 DrawLineRenderer(tmp, cell);
 
@@ -83,6 +87,7 @@ public class MazeSpawner : MonoBehaviour
                     tmp = Instantiate(GoalPrefab, new Vector3(x, 0.1f, z), Quaternion.Euler(0, 0, 0));
                     tmp.transform.parent = transform;
                     tmp.transform.localRotation = GoalPrefab.transform.localRotation;
+                    AddMazeElement(tmp);
                 }
 
                 if (cell.WallRight)
@@ -90,6 +95,7 @@ public class MazeSpawner : MonoBehaviour
                     tmp = Instantiate(Wall, new Vector3(x + CellWidth / 2, 0, z) + Wall.transform.position,
                         Quaternion.Euler(0, 90, 0));
                     tmp.transform.parent = transform;
+                    AddMazeElement(tmp);
                 }
 
                 if (cell.WallFront)
@@ -97,6 +103,7 @@ public class MazeSpawner : MonoBehaviour
                     tmp = Instantiate(Wall, new Vector3(x, 0, z + CellHeight / 2) + Wall.transform.position,
                         Quaternion.Euler(0, 0, 0));
                     tmp.transform.parent = transform;
+                    AddMazeElement(tmp);
                 }
 
                 if (cell.WallLeft)
@@ -104,6 +111,7 @@ public class MazeSpawner : MonoBehaviour
                     tmp = Instantiate(Wall, new Vector3(x - CellWidth / 2, 0, z) + Wall.transform.position,
                         Quaternion.Euler(0, 270, 0));
                     tmp.transform.parent = transform;
+                    AddMazeElement(tmp);
                 }
 
                 if (cell.WallBack)
@@ -117,6 +125,8 @@ public class MazeSpawner : MonoBehaviour
                         tmp.GetComponent<MeshRenderer>().enabled = false;
                         tmp.GetComponent<MeshCollider>().isTrigger = true;
                     }
+
+                    AddMazeElement(tmp);
                 }
             }
         }
@@ -132,9 +142,20 @@ public class MazeSpawner : MonoBehaviour
                     var tmp = Instantiate(Pillar, new Vector3(x - CellWidth / 2, 0, z - CellHeight / 2),
                         Quaternion.identity);
                     tmp.transform.parent = transform;
+                    AddMazeElement(tmp);
                 }
             }
         }
+    }
+
+    public List<GameObject> GetMazeElements()
+    {
+        return _mazeElements;
+    }
+
+    private void AddMazeElement(GameObject item)
+    {
+        _mazeElements.Add(item);
     }
 
     private void DrawLineRenderer(GameObject tmp, MazeCell cell)

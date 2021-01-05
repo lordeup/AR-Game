@@ -29,7 +29,7 @@ public class MazeGenerator : MonoBehaviour
         _playersPosition.Add(new Vector3(15, 0, 7));
         _playersPosition.Add(new Vector3(18, 0, 0));
         _playersPosition.Add(new Vector3(21, 0, 21));
-        _playersPosition.Add(new Vector3(25, 0, 30));
+        _playersPosition.Add(new Vector3(25, 0, 28));
     }
 
     private void InitializeMonstersPosition()

@@ -9,6 +9,9 @@ public class WarriorPlayerControl : BasicPlayerControl
         var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
         var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
 
+        var distance = Vector3.Distance(transform.position, other.transform.position);
+        if (distance > SceneController.MinDistanceCollider) return;
+
         if (isMonsterTag)
         {
             Animator.SetTrigger(Attack);

@@ -21,6 +21,9 @@ public class MonsterControl : MonoBehaviour
         var isWarriorTag = other.CompareTag(GameObjectTag.Warrior.ToString());
         var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
 
+        var distance = Vector3.Distance(transform.position, other.transform.position);
+        if (distance > SceneController.MinDistanceCollider) return;
+
         if (isWarriorTag)
         {
             _animator.SetTrigger(Die);
