@@ -1,9 +1,12 @@
 ﻿using System.Collections;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviour
+public class SceneController : MonoBehaviourPunCallbacks
 {
+    public const float MinDistanceCollider = 2.5f;
+
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -15,5 +18,20 @@ public class SceneController : MonoBehaviour
     {
         yield return new WaitForSeconds(second);
         method?.Invoke();
+    }
+
+    public static bool IsNull(Object obj)
+    {
+        return obj == null;
+    }
+
+    public override void OnLeftRoom()
+    {
+        LoadScene("PlayerSelection");
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
     }
 }

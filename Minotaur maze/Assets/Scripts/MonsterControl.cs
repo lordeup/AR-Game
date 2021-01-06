@@ -4,7 +4,7 @@ public class MonsterControl : MonoBehaviour
 {
     private Animator _animator;
     private static readonly int Die = Animator.StringToHash("Die");
-    private static readonly int Property = Animator.StringToHash("Attack 01");
+    private static readonly int Attack = Animator.StringToHash("Attack 01");
 
     private void Start()
     {
@@ -21,6 +21,9 @@ public class MonsterControl : MonoBehaviour
         var isWarriorTag = other.CompareTag(GameObjectTag.Warrior.ToString());
         var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
 
+        var distance = Vector3.Distance(transform.position, other.transform.position);
+        if (distance > SceneController.MinDistanceCollider) return;
+
         if (isWarriorTag)
         {
             _animator.SetTrigger(Die);
@@ -28,7 +31,7 @@ public class MonsterControl : MonoBehaviour
         }
         else if (isMageTag)
         {
-            _animator.SetTrigger(Property);
+            _animator.SetTrigger(Attack);
         }
     }
 }

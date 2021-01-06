@@ -2,17 +2,20 @@
 
 public class WarriorPlayerControl : BasicPlayerControl
 {
-    private static readonly int Property = Animator.StringToHash("Attack 01");
-    private static readonly int Jump = Animator.StringToHash("Jump");
+    private static readonly int Attack = Animator.StringToHash("Attack 01");
 
     protected override void OnTriggerEnter(Collider other)
     {
         var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
         var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
 
+        var distance = Vector3.Distance(transform.position, other.transform.position);
+        if (distance > SceneController.MinDistanceCollider) return;
+
         if (isMonsterTag)
         {
-            Animator.SetTrigger(Property);
+            Animator.SetTrigger(Attack);
+            SoundManager.PlayFightSound();
         }
 
         if (isWallTag)
@@ -25,9 +28,7 @@ public class WarriorPlayerControl : BasicPlayerControl
         }
     }
 
-    protected override void WinGame()
+    protected override void UpdatePlayer()
     {
-        Animator.SetTrigger(Jump);
-        StartCoroutine(SceneController.WaitMethod(SetActiveWinningPanel, 2.5f));
     }
 }

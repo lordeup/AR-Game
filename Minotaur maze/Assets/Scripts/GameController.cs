@@ -1,8 +1,9 @@
-﻿using Photon.Pun;
+﻿using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GameController : MonoBehaviourPunCallbacks
+public class GameController : MonoBehaviour
 {
     [SerializeField] private Transform prefabWarriorPlayer;
     [SerializeField] private Transform prefabMagePlayer;
@@ -14,6 +15,7 @@ public class GameController : MonoBehaviourPunCallbacks
     private NavMeshSurface _navMeshSurface;
     private ThreadCountControl _threadCountControl;
     private MazeGenerator _mazeGenerator;
+    private PlayerType _playerType;
 
     private void Start()
     {
@@ -24,6 +26,8 @@ public class GameController : MonoBehaviourPunCallbacks
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
         _mazeSpawner.enabled = true;
         _navMeshSurface.enabled = true;
+
+        _playerType = PlayerSelectionManager.PlayerType;
 
         InitializationPlayers();
         if (PhotonNetwork.IsMasterClient)
@@ -37,47 +41,48 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private void InitializationPlayers()
     {
-        var playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        var player = GetPlayer(_playerType);
 
-        if (playerCount == PhotonNetwork.CurrentRoom.MaxPlayers) return;
-
-        var player = prefabWarriorPlayer;
-
-        if (playerCount > 1)
-        {
-            player = prefabMagePlayer;
-        }
+        if (SceneController.IsNull(player)) return;
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
         PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
 
+        joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
+        BasicPlayerControl.MazeElements = _mazeSpawner.GetMazeElements();
 
-        if (player.CompareTag(GameObjectTag.Mage.ToString()))
+        if (_playerType == PlayerType.Mage)
         {
             _threadCountControl = GetComponent<ThreadCountControl>();
             _threadCountControl.enabled = true;
-            BasicPlayerControl.ThreadCount = _threadCountControl;
+            MagePlayerControl.ThreadCountControls = _threadCountControl;
+            MagePlayerControl.FloorsWithLines = _mazeSpawner.FloorsWithLines;
+        }
+    }
+
+    private Transform GetPlayer(PlayerType playerType)
+    {
+        switch (playerType)
+        {
+            case PlayerType.Mage:
+                return prefabMagePlayer;
+            case PlayerType.Warrior:
+                return prefabWarriorPlayer;
+            case PlayerType.Spectator:
+                return null;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(playerType), playerType, null);
         }
     }
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i <= 10; ++i)
+        for (var i = 0; i < 13; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
         }
-    }
-
-    public override void OnLeftRoom()
-    {
-        SceneController.LoadScene("MainMenu");
-    }
-
-    public void LeaveRoom()
-    {
-        PhotonNetwork.LeaveRoom();
     }
 }
