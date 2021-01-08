@@ -30,6 +30,10 @@ public class MazeSpawner : MonoBehaviour
     public float CellHeight = 5;
     public bool AddGaps = true;
     public GameObject GoalPrefab;
+
+    [SerializeField] private Transform fog;
+    [NonSerialized] public bool IsVisibleFog = true;
+
     private bool _isExit;
     public Dictionary<Transform, List<LineRenderer>> FloorsWithLines = new Dictionary<Transform, List<LineRenderer>>();
 
@@ -77,6 +81,12 @@ public class MazeSpawner : MonoBehaviour
                 var z = row * (CellHeight + (AddGaps ? .2f : 0));
                 var cell = mMazeGenerator.GetMazeCell(row, column);
                 var tmp = Instantiate(Floor, new Vector3(x, 0, z), Quaternion.Euler(0, 0, 0));
+
+                if (IsVisibleFog && fog != null)
+                {
+                    Instantiate(fog, new Vector3(x, 2, z), Quaternion.identity);
+                }
+
                 tmp.transform.parent = transform;
                 AddMazeElement(tmp);
 
@@ -310,6 +320,12 @@ public class MazeSpawner : MonoBehaviour
     private LineRenderer CreateLineRenderer()
     {
         var line = new GameObject("line").AddComponent<LineRenderer>();
+        // line.gameObject.AddComponent<VisibilityAroundPlayer>();
+        // var boxCollider = line.gameObject.AddComponent<BoxCollider>();
+
+        // boxCollider.isTrigger = true;
+        // boxCollider.center = new Vector3(2, 0, 0);
+        // boxCollider.size = new Vector3(1, 1, 1);
 
         //   line.alignment = LineAlignment.TransformZ;
 

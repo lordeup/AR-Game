@@ -2,47 +2,44 @@
 
 public class VisibilityAroundPlayer : MonoBehaviour
 {
-    private Collider[] _hitColliders;
+    private void Update()
+    {
+        // var colliders = Physics.OverlapSphere(transform.position, 2);
+        //
+        // foreach (var item in colliders)
+        // {
+        //     var isFogTag = item.CompareTag(GameObjectTag.Fog.ToString());
+        //
+        //     if (!isFogTag) continue;
+        //
+        //     var component = item.gameObject.GetComponent<Renderer>();
+        //
+        //     if (!SceneController.IsNull(component))
+        //     {
+        //         component.enabled = true;
+        //     }
+        // }
+    }
 
-    // Вешаем на объект Rigidbody
-    // Вешаем на объект любой подходящий коллайдер(нам сойдёт куб), задаём его размеры так, чтобы он охватывал чуть больше чем ширину коридора лабиринта
-    // Ставим на коллайдере галку isTrigger
-    // Вешаем на объект этот скрипт.
-    // По итогу скрипт будет отображать все объекты, которые попадают в наш коллайдер-триггер
     private void OnTriggerExit(Collider other)
     {
         var component = other.GetComponent<Renderer>();
+        var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (!SceneController.IsNull(component))
+        if (isFogTag && !SceneController.IsNull(component))
         {
-            // component.enabled = false;
+            component.enabled = true;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         var component = other.GetComponent<Renderer>();
+        var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (!SceneController.IsNull(component))
+        if (isFogTag && !SceneController.IsNull(component))
         {
-            // component.enabled = true;
+            component.enabled = false;
         }
-
-        ExplosionDamage(other.gameObject.transform.localPosition, 2);
-    }
-
-    private void ExplosionDamage(Vector3 center, float radius)
-    {
-        _hitColliders = Physics.OverlapSphere(center, radius);
-
-        // foreach (var hitCollider in hitColliders)
-        // {
-        //     var isMageTag = hitCollider.gameObject.CompareTag(GameObjectTag.Mage.ToString());
-        //     var isWarriorTag = hitCollider.gameObject.CompareTag(GameObjectTag.Warrior.ToString());
-        //
-        //     if (isMageTag || isWarriorTag) continue;
-        //
-        //     hitCollider.gameObject.SetActive(false);
-        // }
     }
 }

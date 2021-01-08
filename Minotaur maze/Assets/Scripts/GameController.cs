@@ -23,11 +23,16 @@ public class GameController : MonoBehaviour
         _mazeSpawner = GetComponent<MazeSpawner>();
         _navMeshSurface = GetComponent<NavMeshSurface>();
 
+        _playerType = PlayerSelectionManager.PlayerType;
+
+        if (_playerType == PlayerType.Spectator)
+        {
+            _mazeSpawner.IsVisibleFog = false;
+        }
+
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
         _mazeSpawner.enabled = true;
         _navMeshSurface.enabled = true;
-
-        _playerType = PlayerSelectionManager.PlayerType;
 
         InitializationPlayers();
         if (PhotonNetwork.IsMasterClient)
@@ -79,7 +84,7 @@ public class GameController : MonoBehaviour
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i < 13; ++i)
+        for (var i = 0; i < 11; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);

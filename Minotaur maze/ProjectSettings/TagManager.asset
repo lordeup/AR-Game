@@ -17,6 +17,7 @@ TagManager:
   - FrontWall
   - LeftWall
   - BackWall
+  - Fog
   layers:
   - Default
   - TransparentFX

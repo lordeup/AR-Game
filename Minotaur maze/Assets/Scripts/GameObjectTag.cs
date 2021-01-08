@@ -5,5 +5,6 @@
     Mage,
     Spectator,
     Thread,
-    Wall
+    Wall,
+    Fog
 }

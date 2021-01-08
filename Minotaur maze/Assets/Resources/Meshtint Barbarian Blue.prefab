@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 3329448724454659649}
   - component: {fileID: 8816312549784653979}
   - component: {fileID: 4191809275630932237}
-  - component: {fileID: 7123162302837701341}
+  - component: {fileID: 6221725162013915129}
   m_Layer: 8
   m_Name: Meshtint Barbarian Blue
   m_TagString: Mage
@@ -627,7 +627,7 @@ Transform:
   m_GameObject: {fileID: 4235121538197199524}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 4237020596060282218}
   - {fileID: 4238612018753862992}
@@ -800,7 +800,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 6
+  m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3329448724454659649
 MonoBehaviour:
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 8816312549784653979}
---- !u!114 &7123162302837701341
+--- !u!114 &6221725162013915129
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

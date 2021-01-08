@@ -23,13 +23,11 @@ public class MazeGenerator : MonoBehaviour
 
     private void InitializePlayersPosition()
     {
-        _playersPosition.Add(Vector3.one);
+        _playersPosition.Add(new Vector3(33, 0, 24));
         _playersPosition.Add(new Vector3(10, 0, 4));
-        _playersPosition.Add(new Vector3(11, 0, 15));
-        _playersPosition.Add(new Vector3(15, 0, 7));
-        _playersPosition.Add(new Vector3(18, 0, 0));
+        _playersPosition.Add(new Vector3(9, 0, 44));
+        _playersPosition.Add(new Vector3(19, 0, 32));
         _playersPosition.Add(new Vector3(21, 0, 21));
-        _playersPosition.Add(new Vector3(25, 0, 28));
     }
 
     private void InitializeMonstersPosition()
@@ -42,9 +40,7 @@ public class MazeGenerator : MonoBehaviour
         _monstersPosition.Add(new Vector3(34, 0, 11));
         _monstersPosition.Add(new Vector3(27, 0, 40));
         _monstersPosition.Add(new Vector3(15, 0, 10));
-        _monstersPosition.Add(new Vector3(9, 0, 19));
         _monstersPosition.Add(new Vector3(17, 0, 20));
-        _monstersPosition.Add(new Vector3(31, 0, 27));
         _monstersPosition.Add(new Vector3(11, 0, 29));
         _monstersPosition.Add(new Vector3(36, 0, 3));
     }

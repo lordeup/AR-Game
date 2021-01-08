@@ -29,7 +29,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
         SoundManager = GetComponent<SoundManager>();
         InitPosition = Agent.nextPosition;
 
-        _mainCamera = Camera.main;
+        // _mainCamera = Camera.main;
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -37,7 +37,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
     {
         if (!_photonView.IsMine || IsDead) return;
 
-        UpdateMainCamera();
+        // UpdateMainCamera();
         JoystickControl();
         UpdatePlayer();
     }
@@ -45,7 +45,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
     private void JoystickControl()
     {
         const float deviation = 0.1f;
-        const float speed = 20f;
+        const float speed = 30f;
         var joystickHorizontal = Joystick.Horizontal;
         var joystickVertical = Joystick.Vertical;
 
