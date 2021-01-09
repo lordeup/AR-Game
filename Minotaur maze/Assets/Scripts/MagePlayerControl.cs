@@ -9,12 +9,12 @@ public class MagePlayerControl : BasicPlayerControl
 
     public static ThreadCountControl ThreadCountControls;
 
-    public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines =
-        new Dictionary<Transform, List<LineRenderer>>();
+    public static Dictionary<Transform, Tuple<Transform, List<LineRenderer>>> FloorsWithLines =
+        new Dictionary<Transform, Tuple<Transform, List<LineRenderer>>>();
 
     private readonly List<Transform> _distancePassed = new List<Transform>();
-    private KeyValuePair<Transform, List<LineRenderer>> _previousFloorAndLines;
-    private KeyValuePair<Transform, List<LineRenderer>> _currentFloorAndLines;
+    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _previousFloorAndLines;
+    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _currentFloorAndLines;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -80,20 +80,32 @@ public class MagePlayerControl : BasicPlayerControl
         _previousFloorAndLines = _currentFloorAndLines;
     }
 
-    private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, List<LineRenderer>> pair)
+    private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> pair)
     {
-        return pair.Equals(default(KeyValuePair<Transform, List<LineRenderer>>));
+        return pair.Equals(default(KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>>));
     }
 
-    private static void ActivateLines(IEnumerable<LineRenderer> lines)
+    private static void ActivateLines(Tuple<Transform, List<LineRenderer>> tuple)
     {
-        foreach (var line in lines)
+        var (item1, item2) = tuple;
+
+        if (!SceneController.IsNull(item1))
+        {
+            var particleSystem = item1.GetComponent<ParticleSystem>();
+
+            if (!SceneController.IsNull(particleSystem))
+            {
+                particleSystem.Stop();
+            }
+        }
+
+        foreach (var line in item2)
         {
             line.enabled = true;
         }
     }
 
-    private KeyValuePair<Transform, List<LineRenderer>> GetCurrentFloorAndLines()
+    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> GetCurrentFloorAndLines()
     {
         var currentPosition = Agent.transform.position;
 

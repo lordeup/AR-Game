@@ -56,7 +56,6 @@ public class GameController : MonoBehaviour
 
         joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
-        BasicPlayerControl.MazeElements = _mazeSpawner.GetMazeElements();
 
         if (_playerType == PlayerType.Mage)
         {
@@ -84,7 +83,7 @@ public class GameController : MonoBehaviour
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i < 11; ++i)
+        for (var i = 0; i < 10; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
