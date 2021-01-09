@@ -14,7 +14,6 @@ public class MagePlayerControl : BasicPlayerControl
 
     private readonly List<Transform> _distancePassed = new List<Transform>();
     private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _previousFloorAndLines;
-    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _currentFloorAndLines;
 
     protected override void OnTriggerEnter(Collider other)
     {
@@ -65,19 +64,19 @@ public class MagePlayerControl : BasicPlayerControl
             return;
         }
 
-        _currentFloorAndLines = GetCurrentFloorAndLines();
+        var currentFloorAndLines = GetCurrentFloorAndLines();
+        var previousFloor = _previousFloorAndLines.Key;
 
-        if (!IsEmptyKeyValuePair(_previousFloorAndLines)
-            && !IsEmptyKeyValuePair(_currentFloorAndLines)
-            && !_currentFloorAndLines.Equals(_previousFloorAndLines))
+        if (!IsEmptyKeyValuePair(_previousFloorAndLines) &&
+            !IsExists(_distancePassed, previousFloor) &&
+            !currentFloorAndLines.Equals(_previousFloorAndLines))
         {
-            var floor = _previousFloorAndLines.Key;
-            _distancePassed.Add(floor);
+            _distancePassed.Add(previousFloor);
             ThreadCountControls.UpdateCountOnDistancePassed();
             ActivateLines(_previousFloorAndLines.Value);
         }
 
-        _previousFloorAndLines = _currentFloorAndLines;
+        _previousFloorAndLines = currentFloorAndLines;
     }
 
     private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> pair)
@@ -115,7 +114,7 @@ public class MagePlayerControl : BasicPlayerControl
 
             var boxCollider = floor.gameObject.GetComponent<BoxCollider>();
 
-            return IsCurrentFloorPosition(boxCollider.bounds, currentPosition) && !IsExists(_distancePassed, floor);
+            return IsCurrentFloorPosition(boxCollider.bounds, currentPosition);
         });
     }
 
