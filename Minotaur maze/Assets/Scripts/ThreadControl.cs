@@ -2,12 +2,9 @@
 
 public class ThreadControl : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
-
-        var distance = Vector3.Distance(transform.position, other.transform.position);
-        if (distance > SceneController.MinDistanceCollider) return;
+        var isMageTag = other.gameObject.CompareTag(GameObjectTag.Mage.ToString());
 
         if (isMageTag)
         {

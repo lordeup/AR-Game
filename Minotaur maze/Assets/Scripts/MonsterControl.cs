@@ -16,13 +16,10 @@ public class MonsterControl : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        var isWarriorTag = other.CompareTag(GameObjectTag.Warrior.ToString());
-        var isMageTag = other.CompareTag(GameObjectTag.Mage.ToString());
-
-        var distance = Vector3.Distance(transform.position, other.transform.position);
-        if (distance > SceneController.MinDistanceCollider) return;
+        var isWarriorTag = other.gameObject.CompareTag(GameObjectTag.Warrior.ToString());
+        var isMageTag = other.gameObject.CompareTag(GameObjectTag.Mage.ToString());
 
         if (isWarriorTag)
         {

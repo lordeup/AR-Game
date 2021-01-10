@@ -4,13 +4,10 @@ public class WarriorPlayerControl : BasicPlayerControl
 {
     private static readonly int Attack = Animator.StringToHash("Attack 01");
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnCollisionEnter(Collision other)
     {
-        var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
-        var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
-
-        var distance = Vector3.Distance(transform.position, other.transform.position);
-        if (distance > SceneController.MinDistanceCollider) return;
+        var isMonsterTag = other.gameObject.CompareTag(GameObjectTag.Monster.ToString());
+        var isWallTag = other.gameObject.CompareTag(GameObjectTag.Wall.ToString());
 
         if (isMonsterTag)
         {
@@ -20,8 +17,9 @@ public class WarriorPlayerControl : BasicPlayerControl
 
         if (isWallTag)
         {
-            var meshCollider = other.GetComponent<MeshCollider>();
-            if (meshCollider.isTrigger)
+            var meshCollider = other.gameObject.GetComponent<MeshCollider>();
+
+            if (!SceneController.IsNull(meshCollider))
             {
                 WinGame();
             }

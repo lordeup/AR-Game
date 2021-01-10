@@ -130,7 +130,7 @@ public class MazeSpawner : MonoBehaviour
                     {
                         _isExit = true;
                         tmp.GetComponent<MeshRenderer>().enabled = false;
-                        tmp.GetComponent<MeshCollider>().isTrigger = true;
+                        tmp.AddComponent<MeshCollider>();
                     }
                 }
             }

@@ -15,14 +15,11 @@ public class MagePlayerControl : BasicPlayerControl
     private readonly List<Transform> _distancePassed = new List<Transform>();
     private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _previousFloorAndLines;
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnCollisionEnter(Collision other)
     {
-        var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
-        var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
-        var isThreadTag = other.CompareTag(GameObjectTag.Thread.ToString());
-
-        var distance = Vector3.Distance(transform.position, other.transform.position);
-        if (distance > SceneController.MinDistanceCollider) return;
+        var isMonsterTag = other.gameObject.CompareTag(GameObjectTag.Monster.ToString());
+        var isWallTag = other.gameObject.CompareTag(GameObjectTag.Wall.ToString());
+        var isThreadTag = other.gameObject.CompareTag(GameObjectTag.Thread.ToString());
 
         if (isMonsterTag && !IsDead)
         {
@@ -40,8 +37,9 @@ public class MagePlayerControl : BasicPlayerControl
 
         if (isWallTag)
         {
-            var meshCollider = other.GetComponent<MeshCollider>();
-            if (meshCollider.isTrigger)
+            var meshCollider = other.gameObject.GetComponent<MeshCollider>();
+
+            if (!SceneController.IsNull(meshCollider))
             {
                 WinGame();
             }

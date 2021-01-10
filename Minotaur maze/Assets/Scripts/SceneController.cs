@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviourPunCallbacks
 {
-    public const float MinDistanceCollider = 2.5f;
-
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

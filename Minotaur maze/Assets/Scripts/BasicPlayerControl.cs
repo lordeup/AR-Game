@@ -94,7 +94,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
         WinningPanel.gameObject.SetActive(true);
     }
 
-    protected abstract void OnTriggerEnter(Collider other);
+    protected abstract void OnCollisionEnter(Collision other);
 
     protected abstract void UpdatePlayer();
 }
