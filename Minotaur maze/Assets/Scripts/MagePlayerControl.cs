@@ -9,21 +9,17 @@ public class MagePlayerControl : BasicPlayerControl
 
     public static ThreadCountControl ThreadCountControls;
 
-    public static Dictionary<Transform, List<LineRenderer>> FloorsWithLines =
-        new Dictionary<Transform, List<LineRenderer>>();
+    public static Dictionary<Transform, Tuple<Transform, List<LineRenderer>>> FloorsWithLines =
+        new Dictionary<Transform, Tuple<Transform, List<LineRenderer>>>();
 
     private readonly List<Transform> _distancePassed = new List<Transform>();
-    private KeyValuePair<Transform, List<LineRenderer>> _previousFloorAndLines;
-    private KeyValuePair<Transform, List<LineRenderer>> _currentFloorAndLines;
+    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> _previousFloorAndLines;
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void OnCollisionEnter(Collision other)
     {
-        var isMonsterTag = other.CompareTag(GameObjectTag.Monster.ToString());
-        var isWallTag = other.CompareTag(GameObjectTag.Wall.ToString());
-        var isThreadTag = other.CompareTag(GameObjectTag.Thread.ToString());
-
-        var distance = Vector3.Distance(transform.position, other.transform.position);
-        if (distance > SceneController.MinDistanceCollider) return;
+        var isMonsterTag = other.gameObject.CompareTag(GameObjectTag.Monster.ToString());
+        var isWallTag = other.gameObject.CompareTag(GameObjectTag.Wall.ToString());
+        var isThreadTag = other.gameObject.CompareTag(GameObjectTag.Thread.ToString());
 
         if (isMonsterTag && !IsDead)
         {
@@ -41,8 +37,9 @@ public class MagePlayerControl : BasicPlayerControl
 
         if (isWallTag)
         {
-            var meshCollider = other.GetComponent<MeshCollider>();
-            if (meshCollider.isTrigger)
+            var meshCollider = other.gameObject.GetComponent<MeshCollider>();
+
+            if (!SceneController.IsNull(meshCollider))
             {
                 WinGame();
             }
@@ -65,35 +62,48 @@ public class MagePlayerControl : BasicPlayerControl
             return;
         }
 
-        _currentFloorAndLines = GetCurrentFloorAndLines();
+        var currentFloorAndLines = GetCurrentFloorAndLines();
+        var previousFloor = _previousFloorAndLines.Key;
 
-        if (!IsEmptyKeyValuePair(_previousFloorAndLines)
-            && !IsEmptyKeyValuePair(_currentFloorAndLines)
-            && !_currentFloorAndLines.Equals(_previousFloorAndLines))
+        if (!IsEmptyKeyValuePair(_previousFloorAndLines) &&
+            !IsExists(_distancePassed, previousFloor) &&
+            !currentFloorAndLines.Equals(_previousFloorAndLines))
         {
-            var floor = _previousFloorAndLines.Key;
-            _distancePassed.Add(floor);
+            _distancePassed.Add(previousFloor);
             ThreadCountControls.UpdateCountOnDistancePassed();
             ActivateLines(_previousFloorAndLines.Value);
         }
 
-        _previousFloorAndLines = _currentFloorAndLines;
+        _previousFloorAndLines = currentFloorAndLines;
     }
 
-    private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, List<LineRenderer>> pair)
+    private static bool IsEmptyKeyValuePair(KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> pair)
     {
-        return pair.Equals(default(KeyValuePair<Transform, List<LineRenderer>>));
+        return pair.Equals(default(KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>>));
     }
 
-    private static void ActivateLines(IEnumerable<LineRenderer> lines)
+    private static void ActivateLines(Tuple<Transform, List<LineRenderer>> tuple)
     {
-        foreach (var line in lines)
+        var (item1, item2) = tuple;
+
+        if (!SceneController.IsNull(item1))
+        {
+            var cubeVisibility = item1.GetComponent<CubeVisibility>();
+            var component = item1.GetComponent<Renderer>();
+
+            if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
+            cubeVisibility.IsVisible = false;
+            component.enabled = false;
+        }
+
+        foreach (var line in item2)
         {
             line.enabled = true;
         }
     }
 
-    private KeyValuePair<Transform, List<LineRenderer>> GetCurrentFloorAndLines()
+    private KeyValuePair<Transform, Tuple<Transform, List<LineRenderer>>> GetCurrentFloorAndLines()
     {
         var currentPosition = Agent.transform.position;
 
@@ -103,7 +113,7 @@ public class MagePlayerControl : BasicPlayerControl
 
             var boxCollider = floor.gameObject.GetComponent<BoxCollider>();
 
-            return IsCurrentFloorPosition(boxCollider.bounds, currentPosition) && !IsExists(_distancePassed, floor);
+            return IsCurrentFloorPosition(boxCollider.bounds, currentPosition);
         });
     }
 

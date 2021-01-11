@@ -2,31 +2,16 @@
 
 public class VisibilityAroundPlayer : MonoBehaviour
 {
-    private void Update()
-    {
-        // var colliders = Physics.OverlapSphere(transform.position, 2);
-        //
-        // foreach (var item in colliders)
-        // {
-        //     var isFogTag = item.CompareTag(GameObjectTag.Fog.ToString());
-        //
-        //     if (!isFogTag) continue;
-        //
-        //     var component = item.gameObject.GetComponent<Renderer>();
-        //
-        //     if (!SceneController.IsNull(component))
-        //     {
-        //         component.enabled = true;
-        //     }
-        // }
-    }
-
     private void OnTriggerExit(Collider other)
     {
+        var cubeVisibility = other.GetComponent<CubeVisibility>();
         var component = other.GetComponent<Renderer>();
+
+        if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
         var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (isFogTag && !SceneController.IsNull(component))
+        if (isFogTag && cubeVisibility.IsVisible)
         {
             component.enabled = true;
         }
@@ -34,10 +19,14 @@ public class VisibilityAroundPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        var cubeVisibility = other.GetComponent<CubeVisibility>();
         var component = other.GetComponent<Renderer>();
+
+        if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
         var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (isFogTag && !SceneController.IsNull(component))
+        if (isFogTag && cubeVisibility.IsVisible)
         {
             component.enabled = false;
         }
