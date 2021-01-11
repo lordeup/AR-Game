@@ -83,7 +83,7 @@ public class GameController : MonoBehaviour
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i < 10; ++i)
+        for (var i = 0; i < 9; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
             PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);

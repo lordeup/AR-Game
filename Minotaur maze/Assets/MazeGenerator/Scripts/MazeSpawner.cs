@@ -86,7 +86,7 @@ public class MazeSpawner : MonoBehaviour
 
                 if (IsVisibleFog && fog != null)
                 {
-                    fogItem = Instantiate(fog, new Vector3(x, 2, z), Quaternion.identity);
+                    fogItem = Instantiate(fog, new Vector3(x, 1.2f, z), Quaternion.identity);
                 }
 
                 tmp.transform.parent = transform;

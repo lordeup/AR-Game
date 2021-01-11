@@ -4,10 +4,14 @@ public class VisibilityAroundPlayer : MonoBehaviour
 {
     private void OnTriggerExit(Collider other)
     {
+        var cubeVisibility = other.GetComponent<CubeVisibility>();
         var component = other.GetComponent<Renderer>();
+
+        if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
         var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (isFogTag && !SceneController.IsNull(component))
+        if (isFogTag && cubeVisibility.IsVisible)
         {
             component.enabled = true;
         }
@@ -15,10 +19,14 @@ public class VisibilityAroundPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        var cubeVisibility = other.GetComponent<CubeVisibility>();
         var component = other.GetComponent<Renderer>();
+
+        if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
         var isFogTag = other.CompareTag(GameObjectTag.Fog.ToString());
 
-        if (isFogTag && !SceneController.IsNull(component))
+        if (isFogTag && cubeVisibility.IsVisible)
         {
             component.enabled = false;
         }

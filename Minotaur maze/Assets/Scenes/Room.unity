@@ -1570,7 +1570,7 @@ MonoBehaviour:
   CellHeight: 4
   AddGaps: 0
   GoalPrefab: {fileID: 3024032193902849234, guid: 7cafb8ceaeeca3e4cbe044ded69a39a5, type: 3}
-  fog: {fileID: 8406455203986672023, guid: c506db807e243404383a94cedd1ba41c, type: 3}
+  fog: {fileID: 6472254892812733618, guid: fac77b5ef3109d347b21918be116954c, type: 3}
 --- !u!114 &2044231489
 MonoBehaviour:
   m_ObjectHideFlags: 0

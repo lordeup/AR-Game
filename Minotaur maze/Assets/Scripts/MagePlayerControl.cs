@@ -88,12 +88,13 @@ public class MagePlayerControl : BasicPlayerControl
 
         if (!SceneController.IsNull(item1))
         {
-            var particleSystem = item1.GetComponent<ParticleSystem>();
+            var cubeVisibility = item1.GetComponent<CubeVisibility>();
+            var component = item1.GetComponent<Renderer>();
 
-            if (!SceneController.IsNull(particleSystem))
-            {
-                particleSystem.Stop();
-            }
+            if (SceneController.IsNull(cubeVisibility) || SceneController.IsNull(component)) return;
+
+            cubeVisibility.IsVisible = false;
+            component.enabled = false;
         }
 
         foreach (var line in item2)
