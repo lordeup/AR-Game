@@ -7,7 +7,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class MazeGenerator : MonoBehaviour
 {
     private readonly List<Vector3> _playersPosition = new List<Vector3>();
-    private readonly List<Vector3> _monstersPosition = new List<Vector3>();
+    public readonly List<Vector3> MonstersPosition = new List<Vector3>();
     private int _randomSeed;
 
     public MazeGenerator()
@@ -23,24 +23,20 @@ public class MazeGenerator : MonoBehaviour
 
     private void InitializePlayersPosition()
     {
-        _playersPosition.Add(new Vector3(33, 0, 24));
+        _playersPosition.Add(new Vector3(8, 0, 31));
         _playersPosition.Add(new Vector3(10, 0, 4));
-        _playersPosition.Add(new Vector3(9, 0, 44));
-        _playersPosition.Add(new Vector3(19, 0, 32));
+        _playersPosition.Add(new Vector3(3, 0, 16));
         _playersPosition.Add(new Vector3(21, 0, 21));
     }
 
     private void InitializeMonstersPosition()
     {
-        _monstersPosition.Add(new Vector3(30, 0, 0));
-        _monstersPosition.Add(new Vector3(5, 0, 0));
-        _monstersPosition.Add(new Vector3(7, 0, 23));
-        _monstersPosition.Add(new Vector3(34, 0, 11));
-        _monstersPosition.Add(new Vector3(27, 0, 40));
-        _monstersPosition.Add(new Vector3(15, 0, 10));
-        _monstersPosition.Add(new Vector3(17, 0, 20));
-        _monstersPosition.Add(new Vector3(11, 0, 29));
-        _monstersPosition.Add(new Vector3(36, 0, 3));
+        MonstersPosition.Add(new Vector3(24, 0, 5));
+        MonstersPosition.Add(new Vector3(5, 0, 0));
+        MonstersPosition.Add(new Vector3(7, 0, 23));
+        MonstersPosition.Add(new Vector3(27, 0, 32));
+        MonstersPosition.Add(new Vector3(15, 0, 10));
+        MonstersPosition.Add(new Vector3(17, 0, 20));
     }
 
     public Hashtable GenerateCustomRoomProperties()
@@ -85,7 +81,7 @@ public class MazeGenerator : MonoBehaviour
 
     public Vector3 GetPositionByIndex(int index)
     {
-        return _monstersPosition[index];
+        return MonstersPosition[index];
     }
 
     private Vector3 GetRandomPosition(IReadOnlyList<Vector3> positions)
