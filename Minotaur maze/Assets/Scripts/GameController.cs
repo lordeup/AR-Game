@@ -25,9 +25,14 @@ public class GameController : MonoBehaviour
 
         _playerType = PlayerSelectionManager.PlayerType;
 
-        if (_playerType == PlayerType.Spectator)
+        switch (_playerType)
         {
-            _mazeSpawner.IsVisibleFog = false;
+            case PlayerType.Spectator:
+                _mazeSpawner.IsVisibleFog = false;
+                break;
+            case PlayerType.Mage:
+                _mazeSpawner.IsVisibleLine = true;
+                break;
         }
 
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
@@ -52,7 +57,8 @@ public class GameController : MonoBehaviour
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
-        PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
+        var playerInstantiate = PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
+        playerInstantiate.transform.parent = transform;
 
         joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
@@ -86,7 +92,8 @@ public class GameController : MonoBehaviour
         for (var i = 0; i < _mazeGenerator.MonstersPosition.Count; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
-            PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
+            var monsterInstantiate = PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
+            monsterInstantiate.transform.parent = transform;
         }
     }
 }
