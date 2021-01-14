@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
                 break;
             case PlayerType.Mage:
                 _mazeSpawner.IsVisibleLine = true;
+                _mazeSpawner.IsVisibleGoal = true;
                 break;
         }
 

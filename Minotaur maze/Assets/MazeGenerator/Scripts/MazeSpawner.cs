@@ -33,6 +33,7 @@ public class MazeSpawner : MonoBehaviour
 
     [SerializeField] private Transform fog;
     [NonSerialized] public bool IsVisibleFog = true;
+    [NonSerialized] public bool IsVisibleGoal = false;
     [NonSerialized] public bool IsVisibleLine = false;
 
     private bool _isExit;
@@ -97,7 +98,7 @@ public class MazeSpawner : MonoBehaviour
                     DrawLineRenderer(tmp, cell, fogItem);
                 }
 
-                if (cell.IsGoal && GoalPrefab != null)
+                if (IsVisibleGoal && cell.IsGoal && GoalPrefab != null)
                 {
                     tmp = Instantiate(GoalPrefab, new Vector3(x, 0.1f, z), Quaternion.Euler(0, 0, 0));
                     tmp.transform.parent = transform;
