@@ -57,8 +57,7 @@ public class GameController : MonoBehaviour
 
         var randomPlayerPosition = _mazeGenerator.GetRandomPlayerPosition();
 
-        var playerInstantiate = PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
-        playerInstantiate.transform.parent = transform;
+        PhotonNetwork.Instantiate(player.name, randomPlayerPosition, Quaternion.identity);
 
         joystick.gameObject.SetActive(true);
         BasicPlayerControl.Joystick = joystick;
@@ -92,8 +91,7 @@ public class GameController : MonoBehaviour
         for (var i = 0; i < _mazeGenerator.MonstersPosition.Count; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
-            var monsterInstantiate = PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
-            monsterInstantiate.transform.parent = transform;
+            PhotonNetwork.InstantiateRoomObject(prefabMonster.name, position, Quaternion.identity);
         }
     }
 }
