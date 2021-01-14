@@ -17,6 +17,12 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
     protected override void Start()
     {
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
+
+        if (SceneController.IsMobile)
+        {
+            _gameController.enabled = false;
+        }
+
         if (mTrackableBehaviour)
         {
             mTrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStatusChanged);
@@ -33,19 +39,27 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
 
     private void Update()
     {
-        // HidingPlayers();
+        if (SceneController.IsMobile)
+        {
+            HidingPlayers();
+        }
     }
 
     private void HidingPlayers()
     {
         if (PhotonNetwork.IsMasterClient || !gameObject.scene.isLoaded || _isVisited) return;
 
-        _photonViews = FindObjectsOfType<PhotonView>();
+        _photonViews = FindPhotonViews();
 
         if (_photonViews.Length <= 0) return;
         _isVisited = true;
 
         SetActivePhotonViews(_photonViews, false);
+    }
+
+    private static PhotonView[] FindPhotonViews()
+    {
+        return FindObjectsOfType<PhotonView>();
     }
 
     private static void SetActivePhotonViews(IEnumerable<PhotonView> views, bool state)
@@ -56,30 +70,62 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
         }
     }
 
+    protected override void OnTrackingLost()
+    {
+        if (mTrackableBehaviour)
+        {
+            var rendererComponents = mTrackableBehaviour.GetComponentsInChildren<Renderer>(true);
+            var colliderComponents = mTrackableBehaviour.GetComponentsInChildren<Collider>(true);
+            var canvasComponents = mTrackableBehaviour.GetComponentsInChildren<Canvas>(true);
+
+            _photonViews = FindPhotonViews();
+            SetActivePhotonViews(_photonViews, false);
+
+            foreach (var component in rendererComponents)
+            {
+                component.enabled = false;
+            }
+
+            foreach (var component in colliderComponents)
+            {
+                component.enabled = false;
+            }
+
+            foreach (var component in canvasComponents)
+            {
+                component.enabled = false;
+            }
+        }
+
+        OnTargetLost?.Invoke();
+    }
+
     protected override void OnTrackingFound()
     {
-        if (!mTrackableBehaviour) return;
-        _gameController.enabled = true;
-
-        var rendererComponents = mTrackableBehaviour.GetComponentsInChildren<Renderer>(true);
-        var colliderComponents = mTrackableBehaviour.GetComponentsInChildren<Collider>(true);
-        var canvasComponents = mTrackableBehaviour.GetComponentsInChildren<Canvas>(true);
-
-        SetActivePhotonViews(_photonViews, true);
-
-        foreach (var component in rendererComponents)
+        if (mTrackableBehaviour)
         {
-            component.enabled = true;
-        }
+            _gameController.enabled = true;
 
-        foreach (var component in colliderComponents)
-        {
-            component.enabled = true;
-        }
+            var rendererComponents = mTrackableBehaviour.GetComponentsInChildren<Renderer>(true);
+            var colliderComponents = mTrackableBehaviour.GetComponentsInChildren<Collider>(true);
+            var canvasComponents = mTrackableBehaviour.GetComponentsInChildren<Canvas>(true);
 
-        foreach (var component in canvasComponents)
-        {
-            component.enabled = true;
+            SetActivePhotonViews(_photonViews, true);
+
+            foreach (var component in rendererComponents)
+            {
+                component.enabled = true;
+            }
+
+            foreach (var component in colliderComponents)
+            {
+                component.enabled = true;
+            }
+
+            foreach (var component in canvasComponents)
+            {
+                component.enabled = true;
+            }
         }
 
         OnTargetFound?.Invoke();
