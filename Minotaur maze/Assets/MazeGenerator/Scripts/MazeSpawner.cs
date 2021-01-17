@@ -87,11 +87,11 @@ public class MazeSpawner : MonoBehaviour
 
                 Transform fogItem = null;
 
-                /*if (IsVisibleFog && fog != null)
+                if (IsVisibleFog && fog != null)
                 {
                     fogItem = Instantiate(fog, new Vector3(x, 1.2f, z), Quaternion.identity);
                     fogItem.transform.parent = transform;
-                }*/
+                }
 
                 if (IsVisibleLine)
                 {

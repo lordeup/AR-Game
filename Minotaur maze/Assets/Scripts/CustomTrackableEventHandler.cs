@@ -7,6 +7,7 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
 {
     private GameController _gameController;
     private bool _isVisited;
+    private bool _isFirstFound;
     private PhotonView[] _photonViews;
 
     private void Awake()
@@ -102,9 +103,22 @@ public class CustomTrackableEventHandler : DefaultTrackableEventHandler
 
     protected override void OnTrackingFound()
     {
-        if (mTrackableBehaviour)
+        if (mTrackableBehaviour && SceneController.IsMobile)
         {
-            _gameController.enabled = true;
+            if (!_isFirstFound)
+            {
+                var gameControllerTransform = _gameController.transform;
+                var trackableTransform = mTrackableBehaviour.transform;
+
+                gameControllerTransform.parent = trackableTransform.parent;
+                gameControllerTransform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                gameControllerTransform.localPosition = Vector3.zero;
+                gameControllerTransform.localRotation = Quaternion.identity;
+
+                _gameController.enabled = true;
+
+                _isFirstFound = true;
+            }
 
             var rendererComponents = mTrackableBehaviour.GetComponentsInChildren<Renderer>(true);
             var colliderComponents = mTrackableBehaviour.GetComponentsInChildren<Collider>(true);
