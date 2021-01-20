@@ -25,9 +25,15 @@ public class GameController : MonoBehaviour
 
         _playerType = PlayerSelectionManager.PlayerType;
 
-        if (_playerType == PlayerType.Spectator)
+        switch (_playerType)
         {
-            _mazeSpawner.IsVisibleFog = false;
+            case PlayerType.Spectator:
+                _mazeSpawner.IsVisibleFog = false;
+                break;
+            case PlayerType.Mage:
+                _mazeSpawner.IsVisibleLine = true;
+                _mazeSpawner.IsVisibleGoal = true;
+                break;
         }
 
         _mazeSpawner.RandomSeed = _mazeGenerator.GetRandomSeed();
@@ -83,10 +89,10 @@ public class GameController : MonoBehaviour
 
     private void InitializationMonsters()
     {
-        for (var i = 0; i < 9; ++i)
+        for (var i = 0; i < _mazeGenerator.MonstersPosition.Count; ++i)
         {
             var position = _mazeGenerator.GetPositionByIndex(i);
-            PhotonNetwork.Instantiate(prefabMonster.name, position, Quaternion.identity);
+            PhotonNetwork.InstantiateRoomObject(prefabMonster.name, position, Quaternion.identity);
         }
     }
 }

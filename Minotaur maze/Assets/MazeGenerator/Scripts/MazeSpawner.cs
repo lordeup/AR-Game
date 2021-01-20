@@ -33,6 +33,8 @@ public class MazeSpawner : MonoBehaviour
 
     [SerializeField] private Transform fog;
     [NonSerialized] public bool IsVisibleFog = true;
+    [NonSerialized] public bool IsVisibleGoal = false;
+    [NonSerialized] public bool IsVisibleLine = false;
 
     private bool _isExit;
 
@@ -81,19 +83,22 @@ public class MazeSpawner : MonoBehaviour
                 var z = row * (CellHeight + (AddGaps ? .2f : 0));
                 var cell = mMazeGenerator.GetMazeCell(row, column);
                 var tmp = Instantiate(Floor, new Vector3(x, 0, z), Quaternion.Euler(0, 0, 0));
+                tmp.transform.parent = transform;
 
                 Transform fogItem = null;
 
                 if (IsVisibleFog && fog != null)
                 {
                     fogItem = Instantiate(fog, new Vector3(x, 1.2f, z), Quaternion.identity);
+                    fogItem.transform.parent = transform;
                 }
 
-                tmp.transform.parent = transform;
+                if (IsVisibleLine)
+                {
+                    DrawLineRenderer(tmp, cell, fogItem);
+                }
 
-                DrawLineRenderer(tmp, cell, fogItem);
-
-                if (cell.IsGoal && GoalPrefab != null)
+                if (IsVisibleGoal && cell.IsGoal && GoalPrefab != null)
                 {
                     tmp = Instantiate(GoalPrefab, new Vector3(x, 0.1f, z), Quaternion.Euler(0, 0, 0));
                     tmp.transform.parent = transform;
@@ -304,14 +309,10 @@ public class MazeSpawner : MonoBehaviour
     private LineRenderer CreateLineRenderer()
     {
         var line = new GameObject("line").AddComponent<LineRenderer>();
-
-        //   line.alignment = LineAlignment.TransformZ;
+        line.transform.parent = transform;
 
         line.startWidth = LineWidth;
         line.endWidth = LineWidth;
-
-        //  line.numCapVertices = 5;
-        //  line.numCornerVertices = 5;
 
         line.enabled = false;
         line.material = material;

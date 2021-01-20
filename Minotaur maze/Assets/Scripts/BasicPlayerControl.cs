@@ -20,6 +20,10 @@ public abstract class BasicPlayerControl : MonoBehaviour
     private static readonly int Run = Animator.StringToHash("Run");
     private static readonly int Jump = Animator.StringToHash("Jump");
 
+    private readonly float _height = SceneController.IsMobile ? 5f : 25f;
+    private readonly float _distance = SceneController.IsMobile ? 4f : 10f;
+    private const float SmoothSpeed = 0.5f;
+
     private void Start()
     {
         Agent = GetComponent<NavMeshAgent>();
@@ -27,7 +31,7 @@ public abstract class BasicPlayerControl : MonoBehaviour
         SoundManager = GetComponent<SoundManager>();
         InitPosition = Agent.nextPosition;
 
-        // _mainCamera = Camera.main;
+        _mainCamera = Camera.main;
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -35,9 +39,29 @@ public abstract class BasicPlayerControl : MonoBehaviour
     {
         if (!_photonView.IsMine || IsDead) return;
 
-        // UpdateMainCamera();
         JoystickControl();
         UpdatePlayer();
+    }
+
+    private void LateUpdate()
+    {
+        if (_photonView.IsMine)
+        {
+            UpdateCamera();
+        }
+    }
+
+    private void UpdateCamera()
+    {
+        var position = transform.position;
+        var mainCameraPosition = _mainCamera.transform.position;
+
+        var worldPosition = Vector3.forward * -_distance + Vector3.up * _height;
+        var newPosition = position + worldPosition;
+
+        mainCameraPosition = Vector3.Slerp(mainCameraPosition, newPosition, SmoothSpeed);
+        _mainCamera.transform.position = mainCameraPosition;
+        _mainCamera.transform.LookAt(position, Vector3.up);
     }
 
     private void JoystickControl()
@@ -63,21 +87,6 @@ public abstract class BasicPlayerControl : MonoBehaviour
             Animator.SetBool(Run, false);
             SoundManager.Stop();
         }
-    }
-
-    private void UpdateMainCamera()
-    {
-        var direction = (Vector3.up * 2 + Vector3.back) * 2;
-        if (Physics.Linecast(transform.position, transform.position + direction, out var hit))
-        {
-            _mainCamera.transform.position = hit.point;
-        }
-        else
-        {
-            _mainCamera.transform.position = transform.position + direction;
-        }
-
-        _mainCamera.transform.LookAt(transform.position);
     }
 
     protected void WinGame()
