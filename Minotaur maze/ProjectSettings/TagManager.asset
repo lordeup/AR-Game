@@ -3,7 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Floor
+  - Coin
+  - Monster
+  - Warrior
+  - Mage
+  - Spectator
+  - Thread
+  - Joystick
+  - Wall
+  - RightWall
+  - FrontWall
+  - LeftWall
+  - BackWall
+  - Fog
   layers:
   - Default
   - TransparentFX
@@ -13,10 +27,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Monster
+  - Thread
+  - Fog
   - 
   - 
   - 
